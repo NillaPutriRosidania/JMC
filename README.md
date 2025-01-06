@@ -1,66 +1,104 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Jember Maternal Cluster (JMC)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Jember Maternal Cluster (JMC)** adalah aplikasi berbasis web yang dirancang untuk memetakan daerah dengan angka kematian ibu dan bayi yang tinggi di Kabupaten Jember menggunakan metode K-Means Clustering. Aplikasi ini bertujuan untuk memudahkan pemerintah dan masyarakat dalam memantau, menganalisis, dan memvisualisasikan data terkait kesehatan ibu dan bayi.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. **Clustering Daerah Tinggi Kematian Ibu dan Bayi**
+   - Menggunakan metode K-Means Clustering untuk mengelompokkan daerah berdasarkan angka kematian ibu dan bayi.
+   - Terdapat 2 pilihan jumlah klaster: 3 dan 5 klaster.
+     - **3 Klaster**: Tinggi, Sedang, Rendah.
+     - **5 Klaster**: Sangat Tinggi, Tinggi, Sedang, Rendah, Sangat Rendah.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+2. **Pemetaan dan Visualisasi Data**
+   - Memvisualisasikan hasil clustering pada peta menggunakan Sistem Informasi Geografis (SIG).
+   - Setiap klaster ditampilkan dengan warna berbeda untuk memudahkan identifikasi area dengan risiko kematian ibu dan bayi tinggi.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+3. **Dashboard Interaktif**
+   - Menyajikan analisis dan data terkait kematian ibu dan bayi secara interaktif.
+   - Menampilkan grafik dan tabel yang mempermudah pemahaman data untuk pengambil keputusan.
 
-## Learning Laravel
+4. **Manajemen Data Puskesmas**
+   - Pengguna dapat mengelola data puskesmas, termasuk menambah, mengedit, dan menghapus data puskesmas yang digunakan dalam analisis.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+5. **Export Data**
+   - Menyediakan fitur untuk mengekspor data clustering dan peta dalam format CSV dan PDF.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Tampilan Website
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Aplikasi ini dirancang dengan antarmuka pengguna (UI) yang sederhana namun informatif. Berikut adalah tampilan yang disediakan:
 
-## Laravel Sponsors
+### 1. **Halaman Utama**
+   - **Peta Interaktif**: Menampilkan peta Kabupaten Jember dengan tanda lokasi puskesmas dan area dengan angka kematian ibu dan bayi tinggi berdasarkan klaster.
+   - **Tabel Data**: Menampilkan tabel yang berisi data puskesmas dan klaster daerah kematian ibu dan bayi, lengkap dengan informasi terkait.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2. **Halaman Clustering**
+   - **Form Pilihan Klaster**: Pengguna dapat memilih jumlah klaster (3 atau 5) untuk menganalisis data.
+   - **Proses Clustering**: Setelah pemilihan, aplikasi akan menjalankan algoritma K-Means untuk mengelompokkan daerah-daerah sesuai dengan data kematian ibu dan bayi.
 
-### Premium Partners
+### 3. **Halaman Visualisasi**
+   - **Grafik**: Menyediakan grafik batang atau pie chart untuk menunjukkan distribusi klaster di daerah-daerah Kabupaten Jember.
+   - **Peta**: Peta interaktif yang menunjukkan lokasi puskesmas dan klaster warna yang menunjukkan tingkat kematian ibu dan bayi.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 4. **Halaman Manajemen Puskesmas**
+   - **Tambah/Edit Hapus Data Puskesmas**: Pengguna dapat menambah, mengedit, atau menghapus data puskesmas yang digunakan dalam analisis clustering.
+   - **Data Input**: Formulir untuk memasukkan data terkait kematian ibu dan bayi pada setiap puskesmas.
 
-## Contributing
+### 5. **Export dan Cetak**
+   - Pengguna dapat mengekspor hasil analisis dan peta ke dalam format CSV untuk data dan PDF untuk laporan visualisasi.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Cara Menjalankan Aplikasi
 
-## Code of Conduct
+1. **Clone Repository**
+    ```bash
+    git clone https://github.com/username/repository.git
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. **Masuk ke Folder Proyek**
+    ```bash
+    cd jmc
+    ```
 
-## Security Vulnerabilities
+3. **Install Dependensi**
+    ```bash
+    composer install
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. **Salin dan Sesuaikan File .env**
+    ```bash
+    cp .env.example .env
+    ```
+    Sesuaikan konfigurasi database pada file `.env`.
 
-## License
+5. **Generate Kunci Aplikasi**
+    ```bash
+    php artisan key:generate
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. **Migrasi dan Seeder Database**
+    ```bash
+    php artisan migrate --seed
+    ```
+
+7. **Jalankan Server Lokal**
+    ```bash
+    php artisan serve
+    ```
+
+Akses aplikasi melalui browser di `http://localhost:8000`.
+
+## Kontribusi
+
+Jika Anda ingin berkontribusi pada proyek ini, silakan ikuti pedoman kontribusi dalam [Panduan Kontribusi Laravel](https://laravel.com/docs/contributions).
+
+## Lisensi
+
+Aplikasi ini dilisensikan di bawah [lisensi MIT](https://opensource.org/licenses/MIT).
+
+## Kerentan Keamanan
+
+Jika Anda menemukan kerentan keamanan pada aplikasi ini, silakan kirimkan email kepada [taylor@laravel.com](mailto:taylor@laravel.com). Semua kerentan akan ditangani dengan cepat.
+
+## Kode Etik
+
+Pastikan untuk mengikuti [Kode Etik](https://laravel.com/docs/contributions#code-of-conduct) saat berkontribusi pada proyek ini agar komunitas tetap inklusif dan ramah.

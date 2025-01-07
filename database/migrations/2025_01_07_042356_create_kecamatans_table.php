@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dashboards', function (Blueprint $table) {
-            $table->id();
+        Schema::create('tbl_kecamatan', function (Blueprint $table) {
+            $table->id('id_kecamatan');
+            $table->string('nama_kecamatan');
+            $table->json('geojson')->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dashboards');
+        Schema::dropIfExists('tbl_kecamatan');
     }
 };

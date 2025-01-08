@@ -10,17 +10,31 @@ class KecamatanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index()
+    // {
+    //     $kecamatan = Kecamatan::all();
+    //     return view('kecamatan.index', compact('kecamatan'));
+    // }
+
+    public function index(Request $request)
     {
-        return view('kecamatan.index');
+        $query = Kecamatan::query();
+        if ($request->has('search') && !empty($request->search)) {
+
+            $query->where('nama_kecamatan', 'like', '%' . $request->search . '%');
+        }
+        $kecamatan = $query->get();
+
+        return view('kecamatan.index', compact('kecamatan'));
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('kecamatan.create');
     }
 
     /**
@@ -28,7 +42,17 @@ class KecamatanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_kecamatan' => 'required|string|max:255',
+            'geojson' => 'nullable|json',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+        ]);
+
+        Kecamatan::create($request->all());
+
+        return redirect()->route('kecamatan.index')
+            ->with('success', 'Kecamatan berhasil ditambahkan.');
     }
 
     /**
@@ -36,7 +60,7 @@ class KecamatanController extends Controller
      */
     public function show(Kecamatan $kecamatan)
     {
-        //
+        return view('kecamatan.show', compact('kecamatan'));
     }
 
     /**
@@ -44,7 +68,7 @@ class KecamatanController extends Controller
      */
     public function edit(Kecamatan $kecamatan)
     {
-        //
+        return view('kecamatan.edit', compact('kecamatan'));
     }
 
     /**
@@ -52,7 +76,17 @@ class KecamatanController extends Controller
      */
     public function update(Request $request, Kecamatan $kecamatan)
     {
-        //
+        $request->validate([
+            'nama_kecamatan' => 'required|string|max:255',
+            'geojson' => 'nullable|json',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+        ]);
+
+        $kecamatan->update($request->all());
+
+        return redirect()->route('kecamatan.index')
+            ->with('success', 'Kecamatan berhasil diperbarui.');
     }
 
     /**
@@ -60,6 +94,9 @@ class KecamatanController extends Controller
      */
     public function destroy(Kecamatan $kecamatan)
     {
-        //
+        $kecamatan->delete();
+
+        return redirect()->route('kecamatan.index')
+            ->with('success', 'Kecamatan berhasil dihapus.');
     }
 }

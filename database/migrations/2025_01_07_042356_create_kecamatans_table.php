@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tbl_kecamatan', function (Blueprint $table) {
+        Schema::create('tb_kecamatan', function (Blueprint $table) {
             $table->id('id_kecamatan');
             $table->string('nama_kecamatan');
             $table->json('geojson')->nullable();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tbl_kecamatan');
+        Schema::dropIfExists('tb_kecamatan');
     }
 };

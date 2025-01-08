@@ -7,14 +7,6 @@ use Illuminate\Http\Request;
 
 class KecamatanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    // public function index()
-    // {
-    //     $kecamatan = Kecamatan::all();
-    //     return view('kecamatan.index', compact('kecamatan'));
-    // }
 
     public function index(Request $request)
     {

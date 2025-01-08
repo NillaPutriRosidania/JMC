@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PuskesmasController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -22,5 +23,6 @@ Route::get('/api/kecamatan', [MapsController::class, 'getKecamatanData']);
 Route::middleware('auth')->group(function () {
     Route::resource('dashboard', DashboardController::class);
     Route::resource('kecamatan', KecamatanController::class);
+    Route::resource('puskesmas', PuskesmasController::class);
     Route::get('logout', [AuthController::class, 'destroy'])->name('logout');
 });

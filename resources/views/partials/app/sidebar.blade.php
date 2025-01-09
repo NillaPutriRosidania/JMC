@@ -47,6 +47,12 @@
                             Puskesmas
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('tahun.index') }}"
+                            class="@if (Route::is('tahun.index')) bg-white text-red-500 @else text-white @endif flex items-center p-2 pl-11 w-full text-base font-medium rounded-lg transition duration-75 group hover:bg-white hover:text-red-500">
+                            Tahun
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

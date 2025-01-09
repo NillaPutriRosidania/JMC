@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\MapsController;
+use App\Http\Controllers\TahunController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,5 +25,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('dashboard', DashboardController::class);
     Route::resource('kecamatan', KecamatanController::class);
     Route::resource('puskesmas', PuskesmasController::class);
+    Route::resource('tahun', TahunController::class);
     Route::get('logout', [AuthController::class, 'destroy'])->name('logout');
 });

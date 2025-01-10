@@ -28,4 +28,8 @@ class Puskesmas extends Model
     {
         return $this->belongsTo(Kecamatan::class, 'id_kecamatan', 'id_kecamatan');
     }
+    public function aki()
+    {
+        return $this->hasMany(AKI::class, 'id_puskesmas');
+    }
 }

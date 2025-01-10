@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_puskesmas');
             $table->unsignedBigInteger('id_tahun');
             $table->integer('akb');
-            $table->enum('status', ['Sangat rendah', 'Rendah', 'Biasa', 'Tinggi', 'Sangat Tinggi'])->nullable(); // status dengan nilai yang sesuai
             $table->timestamps();
         });
     }

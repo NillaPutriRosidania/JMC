@@ -17,4 +17,8 @@ class Tahun extends Model
         'tahun',
     ];
     protected $hidden = [];
+    public function aki()
+    {
+        return $this->hasMany(AKI::class, 'id_tahun', 'id_tahun');
+    }
 }

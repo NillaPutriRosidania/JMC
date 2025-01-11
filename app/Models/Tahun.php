@@ -21,4 +21,8 @@ class Tahun extends Model
     {
         return $this->hasMany(AKI::class, 'id_tahun', 'id_tahun');
     }
+    public function akb()
+    {
+        return $this->hasMany(AKB::class, 'id_tahun', 'id_tahun');
+    }
 }

@@ -2,21 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class AKI extends Model
+class AKB extends Model
 {
     use HasFactory;
-    protected $table = 'data_aki';
+    protected $table = 'data_akb';
 
-    protected $primaryKey = 'id_data_aki';
+    protected $primaryKey = 'id_data_akb';
     public $incrementing = true;
     protected $fillable = [
         'id_puskesmas',
         'id_kecamatan',
         'id_tahun',
-        'aki',
+        'akb',
     ];
 
     public function puskesmas()

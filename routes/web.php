@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AKBController;
 use App\Http\Controllers\AKIController;
 use App\Http\Controllers\PuskesmasController;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('puskesmas', PuskesmasController::class);
     Route::resource('tahun', TahunController::class);
     Route::resource('aki', AKIController::class);
-    // Route::resource('AKB', AKBController::class);
+    Route::resource('akb', AKBController::class);
     Route::get('logout', [AuthController::class, 'destroy'])->name('logout');
 });

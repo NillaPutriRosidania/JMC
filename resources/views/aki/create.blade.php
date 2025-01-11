@@ -10,7 +10,6 @@
             </h2>
         </div>
     </div>
-
     <div class="flex items-center w-full md:w-auto mb-6">
         <form method="POST" action="{{ route('aki.store') }}" id="tahunAkiForm">
             @csrf
@@ -27,8 +26,6 @@
             </button>
         </form>
     </div>
-
-    {{-- Tabel Input AKI --}}
     <form method="POST" action="{{ route('aki.store') }}">
         @csrf
         <input type="hidden" name="id_tahun" id="hidden_tahun">
@@ -55,7 +52,6 @@
                             </td>
                         </tr>
                     @endforeach
-                    {{-- Baris untuk total --}}
                     <tr class="bg-gray-100 font-bold">
                         <td colspan="2" class="px-4 py-2 text-right">Total AKI:</td>
                         <td class="px-4 py-2 border">
@@ -96,8 +92,6 @@
             });
             totalAkiInput.value = total;
         }
-
-        // Update hidden input saat dropdown tahun dipilih
         tahunAkiSelect.addEventListener('change', function() {
             hiddenTahunInput.value = tahunAkiSelect.value;
         });

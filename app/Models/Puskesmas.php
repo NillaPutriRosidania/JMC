@@ -32,4 +32,8 @@ class Puskesmas extends Model
     {
         return $this->hasMany(AKI::class, 'id_puskesmas');
     }
+    public function akb()
+    {
+        return $this->hasMany(AKB::class, 'id_puskesmas');
+    }
 }

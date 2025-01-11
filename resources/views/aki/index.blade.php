@@ -72,8 +72,11 @@
                                     Kecamatan</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">AKI
                                 </th>
-                                <th class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
-                                    Aksi</th>
+                                @if (request('filter_kecamatan') !== 'Kecamatan')
+                                    <th
+                                        class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
+                                        Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody class="bg-white">
@@ -99,6 +102,14 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 text-center">
+                                        <div class="flex justify-center items-center gap-2">
+                                            @if (request('filter_kecamatan') === 'Puskesmas')
+                                                <a href="{{ route('aki.edit', $item->id_data_aki) }}"
+                                                    class="rounded-lg border border-blue-700 px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                                    Edit
+                                                </a>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

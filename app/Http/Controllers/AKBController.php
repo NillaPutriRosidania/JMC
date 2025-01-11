@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Puskesmas;
 use Illuminate\Http\Request;
+use App\Models\Puskesmas;
 use Illuminate\Support\Facades\DB;
-use App\Models\AKI;
+use App\Models\AKB;
 use App\Models\Tahun;
 use Illuminate\Support\Facades\Log;
 
-class AKIController extends Controller
+class AKBController extends Controller
 {
+
     public function index(Request $request)
     {
         $filter = $request->input('filter_kecamatan');
         $search = $request->input('search');
         $filter_tahun = $request->input('filter_tahun', date('Y'));
         $tahunOptions = Tahun::pluck('tahun', 'id_tahun')->toArray();
-        $AKI = AKI::with('puskesmas.kecamatan')
+        $AKB = AKB::with('puskesmas.kecamatan')
             ->when($filter_tahun, function ($query, $filter_tahun) {
                 $query->where('id_tahun', $filter_tahun);
             })
@@ -27,43 +28,44 @@ class AKIController extends Controller
                         $query->where('nama_puskesmas', 'like', "%$search%");
                     });
                 })
-                    ->select('data_aki.*')
-                    ->join('puskesmas', 'data_aki.id_puskesmas', '=', 'puskesmas.id_puskesmas');
+                    ->select('data_akb.*')
+                    ->join('puskesmas', 'data_akb.id_puskesmas', '=', 'puskesmas.id_puskesmas');
             })
             ->when($filter === 'Kecamatan', function ($query) use ($search) {
-                $query->join('puskesmas', 'data_aki.id_puskesmas', '=', 'puskesmas.id_puskesmas')
+                $query->join('puskesmas', 'data_akb.id_puskesmas', '=', 'puskesmas.id_puskesmas')
                     ->join('tb_kecamatan', 'puskesmas.id_kecamatan', '=', 'tb_kecamatan.id_kecamatan')
                     ->when($search, function ($query, $search) {
                         $query->where('tb_kecamatan.nama_kecamatan', 'like', "%$search%");
                     })
-                    ->groupBy('tb_kecamatan.id_kecamatan', 'tb_kecamatan.nama_kecamatan', 'data_aki.id_tahun')
+                    ->groupBy('tb_kecamatan.id_kecamatan', 'tb_kecamatan.nama_kecamatan', 'data_akb.id_tahun')
                     ->select(
                         'tb_kecamatan.id_kecamatan',
                         'tb_kecamatan.nama_kecamatan',
-                        'data_aki.id_tahun',
-                        DB::raw('SUM(data_aki.aki) as total_aki')
+                        'data_akb.id_tahun',
+                        DB::raw('SUM(data_akb.akb) as total_akb')
                     );
             })
 
             ->get();
-        return view('AKI.index', compact('AKI', 'tahunOptions'));
+        return view('AKB.index', compact('AKB', 'tahunOptions'));
     }
 
     public function create(Request $request)
     {
-        $tahunAki = Tahun::whereDoesntHave('aki')->get();
+        $tahunAkb = Tahun::whereDoesntHave('akb')->get();
         $puskesmas = Puskesmas::all();
 
-        return view('aki.create', compact('tahunAki', 'puskesmas'));
+        return view('akb.create', compact('tahunAkb', 'puskesmas'));
     }
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'id_tahun' => 'required|exists:tahun,id_tahun',
             'id_puskesmas.*' => 'required|exists:puskesmas,id_puskesmas',
             'id_kecamatan.*' => 'required|exists:tb_kecamatan,id_kecamatan',
-            'aki.*' => 'required|numeric|min:0',
+            'akb.*' => 'required|numeric|min:0',
         ]);
 
         try {
@@ -72,60 +74,59 @@ class AKIController extends Controller
                 if (!$puskesmas) {
                     continue;
                 }
-                $akiValue = $request->aki[$puskesmasId] ?? null;
-                if ($akiValue === null) {
-                    Log::error('Nilai AKI tidak ditemukan atau tidak valid', [
+                $akbValue = $request->akb[$puskesmasId] ?? null;
+                if ($akbValue === null) {
+                    Log::error('Nilai AKB tidak ditemukan atau tidak valid', [
                         'id_puskesmas' => $puskesmas->id_puskesmas,
                         'id_kecamatan' => $request->id_kecamatan[$index],
                         'id_tahun' => $request->id_tahun,
                     ]);
                     continue;
                 }
-
-                AKI::create([
+                AKB::create([
                     'id_puskesmas' => $puskesmas->id_puskesmas,
                     'id_kecamatan' => $request->id_kecamatan[$index],
                     'id_tahun' => $request->id_tahun,
-                    'aki' => $akiValue,
+                    'akb' => $akbValue,
                 ]);
             }
 
-            return redirect()->route('aki.index')->with('success', 'Data AKI berhasil disimpan.');
+            return redirect()->route('akb.index')->with('success', 'Data AKB berhasil disimpan.');
         } catch (\Exception $e) {
-            Log::error("Terjadi kesalahan saat menyimpan data AKI: " . $e->getMessage());
-            return redirect()->route('aki.create')->with('error', 'Terjadi kesalahan saat menyimpan data.');
+            Log::error("Terjadi kesalahan saat menyimpan data AKB: " . $e->getMessage());
+            return redirect()->route('akb.create')->with('error', 'Terjadi kesalahan saat menyimpan data.');
         }
     }
 
-    public function edit($id_data_aki)
+    public function edit($id_data_akb)
     {
-        $AKI = AKI::findOrFail($id_data_aki);
+        $AKB = AKB::findOrFail($id_data_akb);
 
-        return view('aki.edit', compact('AKI'));
+        return view('akb.edit', compact('AKB'));
     }
-    public function update(Request $request, $id_data_aki)
+    public function update(Request $request, $id_data_akb)
     {
         $request->validate([
-            'aki' => 'required|numeric|min:0',
+            'akb' => 'required|numeric|min:0',
         ]);
 
         try {
-            $AKI = AKI::findOrFail($id_data_aki);
+            $AKB = AKB::findOrFail($id_data_akb);
 
-            $AKI->update([
-                'aki' => $request->aki,
+            $AKB->update([
+                'akb' => $request->akb,
             ]);
 
-            Log::info('Data AKI berhasil diperbarui:', [
-                'id_data_aki' => $id_data_aki,
-                'aki' => $request->aki,
+            Log::info('Data AKB berhasil diperbarui:', [
+                'id_data_akb' => $id_data_akb,
+                'akb' => $request->akb,
             ]);
 
-            return redirect()->route('aki.index')->with('success', 'Data AKI berhasil diperbarui.');
+            return redirect()->route('akb.index')->with('success', 'Data AKB berhasil diperbarui.');
         } catch (\Exception $e) {
-            Log::error('Terjadi kesalahan saat memperbarui data AKI:', ['message' => $e->getMessage()]);
+            Log::error('Terjadi kesalahan saat memperbarui data AKB:', ['message' => $e->getMessage()]);
 
-            return redirect()->route('aki.edit', $id_data_aki)->with('error', 'Terjadi kesalahan saat memperbarui data.');
+            return redirect()->route('akb.edit', $id_data_akb)->with('error', 'Terjadi kesalahan saat memperbarui data.');
         }
     }
 }

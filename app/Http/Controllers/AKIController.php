@@ -57,46 +57,6 @@ class AKIController extends Controller
         return view('aki.create', compact('tahunAki', 'puskesmas'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'id_tahun' => 'required|exists:tahun,id_tahun',
-    //         'id_puskesmas.*' => 'required|exists:puskesmas,id_puskesmas',
-    //         'id_kecamatan.*' => 'required|exists:tb_kecamatan,id_kecamatan',
-    //         'aki.*' => 'required|numeric|min:0',
-    //     ]);
-
-    //     try {
-    //         foreach ($request->id_puskesmas as $index => $puskesmasId) {
-    //             $puskesmas = Puskesmas::find($puskesmasId);
-    //             if (!$puskesmas) {
-    //                 continue;
-    //             }
-    //             $akiValue = $request->aki[$puskesmasId] ?? null;
-    //             if ($akiValue === null) {
-    //                 Log::error('Nilai AKI tidak ditemukan atau tidak valid', [
-    //                     'id_puskesmas' => $puskesmas->id_puskesmas,
-    //                     'id_kecamatan' => $request->id_kecamatan[$index],
-    //                     'id_tahun' => $request->id_tahun,
-    //                 ]);
-    //                 continue;
-    //             }
-
-    //             AKI::create([
-    //                 'id_puskesmas' => $puskesmas->id_puskesmas,
-    //                 'id_kecamatan' => $request->id_kecamatan[$index],
-    //                 'id_tahun' => $request->id_tahun,
-    //                 'aki' => $akiValue,
-    //             ]);
-    //         }
-
-    //         return redirect()->route('aki.index')->with('success', 'Data AKI berhasil disimpan.');
-    //     } catch (\Exception $e) {
-    //         Log::error("Terjadi kesalahan saat menyimpan data AKI: " . $e->getMessage());
-    //         return redirect()->route('aki.create')->with('error', 'Terjadi kesalahan saat menyimpan data.');
-    //     }
-    // }
-
     public function store(Request $request)
     {
         $request->validate([

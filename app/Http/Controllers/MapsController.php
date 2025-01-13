@@ -4,21 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 
-class MapsController  extends Controller
+class MapsController extends Controller
 {
-
-    public function getKecamatanData()
+    public function getKecamatanData($type = 'aki')
     {
-        // Join antara tb_kecamatan dan kmeans_aki berdasarkan id_kecamatan
+        // Pilih tabel berdasarkan jenis (aki atau akb)
+        $kmeansTable = $type === 'akb' ? 'kmeans_akb' : 'kmeans_aki';
+
+        // Join antara tb_kecamatan dan tabel kmeans yang sesuai berdasarkan id_kecamatan
         $kecamatan = DB::table('tb_kecamatan')
-            ->join('kmeans_aki', 'tb_kecamatan.id_kecamatan', '=', 'kmeans_aki.id_kecamatan')
+            ->join($kmeansTable, 'tb_kecamatan.id_kecamatan', '=', "$kmeansTable.id_kecamatan")
             ->select(
                 'tb_kecamatan.id_kecamatan',
                 'tb_kecamatan.nama_kecamatan',
                 'tb_kecamatan.geojson',
                 'tb_kecamatan.latitude',
                 'tb_kecamatan.longitude',
-                'kmeans_aki.id_cluster' // Ambil id_cluster dari tabel kmeans_aki
+                "$kmeansTable.id_cluster" // Ambil id_cluster dari tabel yang sesuai
             )
             ->get();
 

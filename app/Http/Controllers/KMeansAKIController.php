@@ -11,10 +11,13 @@ class KMeansAKIController extends Controller
 {
     public function index()
     {
+        // Ambil data kmeans aki dan kecamatan
         $kmeansAki = KMeansAKI::with('kecamatan')->get();
 
+        // Urutkan berdasarkan grand_total_aki
         $sortedData = $kmeansAki->sortBy('grand_total_aki');
 
+        // Tentukan nilai centroid acak untuk k-means
         $randomCentroids = [
             $sortedData->values()[0]->grand_total_aki,   // Total AKI terkecil ke-1
             $sortedData->values()[5]->grand_total_aki,   // Total AKI terkecil ke-6
@@ -32,12 +35,13 @@ class KMeansAKIController extends Controller
             $clusters = [];
 
             foreach ($kmeansAki as $data) {
+                // Hitung jarak antara titik data dan setiap centroid
                 $distances = array_map(fn($centroid) => sqrt(pow($data->grand_total_aki - $centroid, 2)), $randomCentroids);
                 $minDistance = min($distances);
                 $cluster = array_search($minDistance, $distances) + 1; // Cluster C1, C2, ...
 
                 $clusters[] = [
-                    'id' => $data->id_kmeans_aki, // Tambahkan ID data untuk update nanti
+                    'id' => $data->id_kmeans_aki,
                     'id_kecamatan' => $data->kecamatan->nama_kecamatan,
                     'grand_total_aki' => $data->grand_total_aki,
                     'distances' => $distances,
@@ -71,12 +75,18 @@ class KMeansAKIController extends Controller
             $iterationIndex++;
         }
 
+        // Pembaruan data cluster ke database
         DB::transaction(function () use ($clusters) {
             foreach ($clusters as $cluster) {
-                KMeansAKI::where('id_kmeans_aki', $cluster['id'])->update(['id_cluster' => $cluster['cluster']]);
+                // Update id_cluster dan grand_total_aki untuk setiap data
+                KMeansAKI::where('id_kmeans_aki', $cluster['id'])->update([
+                    'id_cluster' => $cluster['cluster'],
+                    'grand_total_aki' => $cluster['grand_total_aki'], // Memastikan nilai AKI tetap diperbarui
+                ]);
             }
         });
 
+        // Kelompokkan hasil akhir berdasarkan id_cluster
         $finalClusters = $kmeansAki->groupBy('id_cluster');
 
         // Jika ingin tetap memisahkan berdasarkan C1, C2, C3, C4, C5
@@ -88,7 +98,7 @@ class KMeansAKIController extends Controller
             'C5' => $finalClusters->get(5, collect([])),
         ];
 
-
+        // Kembalikan view dengan data iterasi dan hasil final
         return view('kmeans_aki.index', compact('kmeansAki', 'iterations', 'finalClusters'));
     }
 }

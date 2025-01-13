@@ -23,7 +23,8 @@ Route::get('register', [AuthController::class, 'create'])->name('register');
 Route::post('register', [AuthController::class, 'store'])->name('register.store');
 Route::get('forgot-password', [AuthController::class, 'edit'])->name('forgot');
 
-Route::get('/api/kecamatan', [MapsController::class, 'getKecamatanData']);
+// Route::get('/api/kecamatan', [MapsController::class, 'getKecamatanData']);
+Route::get('/api/kecamatan/{type}', [MapsController::class, 'getKecamatanData']);
 
 Route::middleware('auth')->group(function () {
     Route::resource('dashboard', DashboardController::class);
@@ -33,6 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('aki', AKIController::class);
     Route::resource('akb', AKBController::class);
     Route::resource('kmeans_aki', KMeansAKIController::class);
-    Route::resource('kmeans_akb', KMeansAKBController::class);    
+    Route::resource('kmeans_akb', KMeansAKBController::class);
     Route::get('logout', [AuthController::class, 'destroy'])->name('logout');
 });

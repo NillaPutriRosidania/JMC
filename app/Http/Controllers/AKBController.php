@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\Log;
 
 class AKBController extends Controller
 {
-
     public function index(Request $request)
     {
         $filter = $request->input('filter_kecamatan');
         $search = $request->input('search');
         $filter_tahun = $request->input('filter_tahun', date('Y'));
         $tahunOptions = Tahun::pluck('tahun', 'id_tahun')->toArray();
+
         $AKB = AKB::with('puskesmas.kecamatan')
             ->when($filter_tahun, function ($query, $filter_tahun) {
                 $query->where('id_tahun', $filter_tahun);
@@ -45,9 +45,9 @@ class AKBController extends Controller
                         DB::raw('SUM(data_akb.akb) as total_akb')
                     );
             })
-
             ->get();
-        return view('AKB.index', compact('AKB', 'tahunOptions'));
+
+        return view('akb.index', compact('AKB', 'tahunOptions'));
     }
 
     public function create(Request $request)
@@ -57,6 +57,7 @@ class AKBController extends Controller
 
         return view('akb.create', compact('tahunAkb', 'puskesmas'));
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -93,20 +94,28 @@ class AKBController extends Controller
                 ]);
 
                 $idKecamatan = $request->id_kecamatan[$index];
+
                 if (!isset($akbData[$idKecamatan])) {
                     $akbData[$idKecamatan] = 0;
                 }
                 $akbData[$idKecamatan] += $akbValue;
             }
 
-            foreach ($akbData as $idKecamatan => $grandTotalAkb) {
+            foreach ($akbData as $idKecamatan => $newAkbValue) {
+                // Ambil data sebelumnya di tabel kmeans_akb
+                $existingData = DB::table('kmeans_akb')->where('id_kecamatan', $idKecamatan)->first();
+                $existingTotal = $existingData ? $existingData->grand_total_akb : 0;
+
+                // Hitung total baru
+                $grandTotalAkb = $existingTotal + $newAkbValue;
+
                 DB::table('kmeans_akb')->updateOrInsert(
                     ['id_kecamatan' => $idKecamatan],
                     [
                         'grand_total_akb' => $grandTotalAkb,
                         'id_cluster' => null,
                         'updated_at' => now(),
-                        'created_at' => now(),
+                        'created_at' => $existingData ? $existingData->created_at : now(),
                     ]
                 );
             }
@@ -125,6 +134,7 @@ class AKBController extends Controller
 
         return view('akb.edit', compact('AKB'));
     }
+
     public function update(Request $request, $id_data_akb)
     {
         $request->validate([

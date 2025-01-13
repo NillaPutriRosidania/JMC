@@ -164,7 +164,7 @@
             return colors[clusterId] || '#000000'; // Default to black if not found
         }
 
-        fetch('/api/kecamatan')
+        fetch('/api/kecamatan/aki')
             .then(response => response.json())
             .then(data => {
                 console.log(data); // Pastikan data berhasil diterima

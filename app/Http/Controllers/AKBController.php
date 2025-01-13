@@ -57,10 +57,8 @@ class AKBController extends Controller
 
         return view('akb.create', compact('tahunAkb', 'puskesmas'));
     }
-
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'id_tahun' => 'required|exists:tahun,id_tahun',
             'id_puskesmas.*' => 'required|exists:puskesmas,id_puskesmas',
@@ -69,11 +67,14 @@ class AKBController extends Controller
         ]);
 
         try {
+            $akbData = [];
+
             foreach ($request->id_puskesmas as $index => $puskesmasId) {
                 $puskesmas = Puskesmas::find($puskesmasId);
                 if (!$puskesmas) {
                     continue;
                 }
+
                 $akbValue = $request->akb[$puskesmasId] ?? null;
                 if ($akbValue === null) {
                     Log::error('Nilai AKB tidak ditemukan atau tidak valid', [
@@ -83,12 +84,31 @@ class AKBController extends Controller
                     ]);
                     continue;
                 }
+
                 AKB::create([
                     'id_puskesmas' => $puskesmas->id_puskesmas,
                     'id_kecamatan' => $request->id_kecamatan[$index],
                     'id_tahun' => $request->id_tahun,
                     'akb' => $akbValue,
                 ]);
+
+                $idKecamatan = $request->id_kecamatan[$index];
+                if (!isset($akbData[$idKecamatan])) {
+                    $akbData[$idKecamatan] = 0;
+                }
+                $akbData[$idKecamatan] += $akbValue;
+            }
+
+            foreach ($akbData as $idKecamatan => $grandTotalAkb) {
+                DB::table('kmeans_akb')->updateOrInsert(
+                    ['id_kecamatan' => $idKecamatan],
+                    [
+                        'grand_total_akb' => $grandTotalAkb,
+                        'id_cluster' => null,
+                        'updated_at' => now(),
+                        'created_at' => now(),
+                    ]
+                );
             }
 
             return redirect()->route('akb.index')->with('success', 'Data AKB berhasil disimpan.');
@@ -97,6 +117,7 @@ class AKBController extends Controller
             return redirect()->route('akb.create')->with('error', 'Terjadi kesalahan saat menyimpan data.');
         }
     }
+
 
     public function edit($id_data_akb)
     {

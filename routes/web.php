@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AKBController;
 use App\Http\Controllers\AKIController;
+use App\Http\Controllers\KMeansAKBController;
+use App\Http\Controllers\KMeansAKIController;
 use App\Http\Controllers\PuskesmasController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -30,5 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('tahun', TahunController::class);
     Route::resource('aki', AKIController::class);
     Route::resource('akb', AKBController::class);
+    Route::resource('kmeans_aki', KMeansAKIController::class);
+    Route::resource('kmeans_akb', KMeansAKBController::class);    
     Route::get('logout', [AuthController::class, 'destroy'])->name('logout');
 });

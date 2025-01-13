@@ -61,28 +61,6 @@
                         </p>
                     </div>
                 </div>
-                {{-- <div class="w-full px-4">
-                    <div class="flex flex-wrap items-center justify-center lg:flex-nowrap lg:-mt-20">
-                        <div
-                            class="flex flex-wrap justify-center items-center bg-white drop-shadow-2xl w-2/3 h-max py-10 mb-20 rounded-3xl lg:w-1/4 lg:mr-12">
-                            <img src="{{ asset('assets//img/box-1.png') }}" alt="box-1" height="200px" width="180px"
-                                class="flex items-center justify-center" />
-                            <h5 class="text-center text-lg mt-4 text-dark font-bold w-9/12">Analisis Spasial</h5>
-                        </div>
-                        <div
-                            class="flex flex-wrap justify-center items-center bg-white drop-shadow-2xl w-2/3 h-max py-10 mb-20 rounded-3xl lg:w-1/4 lg:mr-12 lg:mt-48">
-                            <img src="{{ asset('assets//img/box-2.png') }}" height="200px" width="150px"
-                                class="flex items-center justify-center" />
-                            <h5 class="text-center text-lg mt-4 mx-3 text-dark font-bold">Tindakan Berbasis Data</h5>
-                        </div>
-                        <div
-                            class="flex flex-wrap justify-center items-center bg-white drop-shadow-2xl w-2/3 h-max py-10 mb-20 rounded-3xl lg:w-1/4">
-                            <img src="{{ asset('assets//img/box-3.png') }}" height="200px" width="200px"
-                                class="flex items-center justify-center" />
-                            <h5 class="text-center text-lg mt-4 mx-3 text-dark font-bold">Akses Mudah</h5>
-                        </div>
-                    </div>
-                </div> --}}
                 <div class="w-full px-4">
                     <div class="flex flex-wrap items-center justify-center lg:flex-nowrap lg:-mt-20">
                         <!-- Card 1 -->

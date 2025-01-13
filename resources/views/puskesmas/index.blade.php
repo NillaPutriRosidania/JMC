@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'puskesmas')
+@section('title', 'Puskesmas')
 
 @section('content')
 
@@ -28,6 +28,7 @@
             </div>
         </form>
     </div>
+
     <section class="bg-white py-4 rounded-lg mb-4 antialiased md:py-8">
         <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
             <div class="mx-auto max-w-5xl">
@@ -69,7 +70,7 @@
                             @foreach ($puskesmas as $item)
                                 <tr class="border-b border-gray-200">
                                     <td class="px-6 py-4 text-gray-900">
-                                        {{ $loop->iteration }}
+                                        {{ $puskesmas->firstItem() + $loop->index }}
                                     </td>
                                     <td class="px-6 py-4 text-gray-900">
                                         {{ $item->nama_puskesmas }}
@@ -107,6 +108,18 @@
                             @endforeach
                         </tbody>
                     </table>
+
+                    <div class="flex justify-between items-center mt-4">
+                        <div>
+                            {{ $puskesmas->appends(['search' => request('search')])->links('pagination::tailwind', [
+                                'class' => 'flex items-center space-x-2',
+                                'next' => 'bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600',
+                                'prev' => 'bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600',
+                                'active' => 'bg-red-600 text-white px-4 py-2 rounded-lg',
+                                'disabled' => 'text-gray-400 cursor-not-allowed',
+                            ]) }}
+                        </div>
+                    </div>
                 @else
                     <div class="text-center">
                         <h1 class="text-red-600 font-bold">Data puskesmas masih kosong</h1>

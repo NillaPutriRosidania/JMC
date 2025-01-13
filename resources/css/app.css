@@ -3324,4 +3324,21 @@ html {
 #map {
     height: 500px;
     width: 100%;
+    border: 1px solid red; /* untuk debugging */
+}
+
+.pagination .page-link {
+    @apply bg-red-500 text-white hover:bg-red-600 px-4 py-2 rounded-lg;
+}
+
+.pagination .page-link:hover {
+    @apply bg-red-600;
+}
+
+.pagination .active .page-link {
+    @apply bg-red-600 text-white;
+}
+
+.pagination .disabled .page-link {
+    @apply text-gray-400 cursor-not-allowed;
 }

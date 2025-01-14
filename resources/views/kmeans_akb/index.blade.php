@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Auth::check() ? 'layouts.app' : 'layouts.dashboardguest')
 
 @section('title', 'Data KMeans AKB')
 

@@ -14,7 +14,7 @@
                         Sebuah inovasi untuk mendukung pengambilan keputusan berbasis data dan meningkatkan layanan
                         kesehatan masyarakat
                     </p>
-                    <a href="{{ route('login') }}"
+                    <a href="{{ route('kmeans_akb.index') }}"
                         class="font-normal text-sm py-2 px-7 md:text-base md:py-3 md:px-10 bg-slate-50 text-dark border-collapse rounded-lg md:ml-11 ml-4 hover:bg-transparent hover:text-white hover:border hover:border-white duration-500">Analisis
                         Sekarang</a>
                 </div>

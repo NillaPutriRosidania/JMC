@@ -1,5 +1,4 @@
-@extends('layouts.app')
-
+@extends(Auth::check() ? 'layouts.app' : 'layouts.dashboardguest')
 @section('title', 'Data KMeans AKI')
 
 @section('content')
@@ -175,7 +174,7 @@
                             style: function() {
                                 return {
                                     color: generateColor(kecamatan
-                                    .id_cluster),
+                                        .id_cluster),
                                     weight: 2,
                                     fillOpacity: 0.5
                                 };

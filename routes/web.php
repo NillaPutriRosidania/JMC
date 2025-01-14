@@ -22,8 +22,6 @@ Route::post('login', [AuthController::class, 'show']);
 Route::get('register', [AuthController::class, 'create'])->name('register');
 Route::post('register', [AuthController::class, 'store'])->name('register.store');
 Route::get('forgot-password', [AuthController::class, 'edit'])->name('forgot');
-
-// Route::get('/api/kecamatan', [MapsController::class, 'getKecamatanData']);
 Route::get('/api/kecamatan/{type}', [MapsController::class, 'getKecamatanData']);
 
 Route::middleware('auth')->group(function () {
@@ -35,5 +33,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('akb', AKBController::class);
     Route::resource('kmeans_aki', KMeansAKIController::class);
     Route::resource('kmeans_akb', KMeansAKBController::class);
+    Route::get('/api/charts/{type}/{puskesmasId}', [DashboardController::class, 'getChartData']);
     Route::get('logout', [AuthController::class, 'destroy'])->name('logout');
 });

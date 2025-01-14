@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,5 +21,8 @@ class KMeansAKI extends Model
     {
         return $this->belongsTo(Kecamatan::class, 'id_kecamatan');
     }
-
+    public function puskesmas()
+    {
+        return $this->belongsTo(Puskesmas::class, 'id_puskesmas');
+    }
 }

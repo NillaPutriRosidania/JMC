@@ -145,6 +145,7 @@
     </div>
 @endsection
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var map = L.map('map').setView([-8.1845, 113.6681], 11);
@@ -155,33 +156,42 @@
 
         function generateColor(clusterId) {
             const colors = {
-                1: '#0000FF', // Blue
-                2: '#008000', // Green
-                3: '#FFFF00', // Yellow
-                4: '#FFA500', // Orange
-                5: '#FF0000' // Red
+                1: '#0000FF',
+                2: '#008000',
+                3: '#FFFF00',
+                4: '#FFA500',
+                5: '#FF0000'
             };
-            return colors[clusterId] || '#000000'; // Default to black if not found
+            return colors[clusterId] || '#000000';
         }
-
         fetch('/api/kecamatan/aki')
             .then(response => response.json())
             .then(data => {
-                console.log(data); // Pastikan data berhasil diterima
+                console.log(data);
                 data.forEach(kecamatan => {
                     try {
                         const geojson = JSON.parse(kecamatan.geojson);
-
-                        L.geoJSON(geojson, {
+                        const layer = L.geoJSON(geojson, {
                             style: function() {
                                 return {
                                     color: generateColor(kecamatan
-                                        .id_cluster), // Menggunakan id_cluster
+                                    .id_cluster),
                                     weight: 2,
                                     fillOpacity: 0.5
                                 };
                             }
                         }).bindPopup(`<b>${kecamatan.nama_kecamatan}</b>`).addTo(map);
+                        layer.on('click', function() {
+                            if (kecamatan.id_cluster === 5) {
+                                Swal.fire({
+                                    title: "<strong style='font-size: 24px;'>AKI/AKB TINGGI</strong>", // Judul besar dan bold
+                                    icon: "warning",
+                                    html: "<p style='font-size: 14px;'>Jika AKI dan AKB tinggi, Dinas Kesehatan (Dinkes) akan meningkatkan kualitas pelayanan kesehatan, melakukan penyuluhan dan edukasi kesehatan, melatih tenaga medis, memperbaiki akses ke fasilitas kesehatan, menangani komplikasi, menyediakan program gizi, serta memantau kesehatan ibu dan bayi pasca persalinan untuk menurunkan angka kematian tersebut.</p>",
+                                    confirmButtonText: "OK",
+                                    confirmButtonColor: "#3085d6",
+                                });
+                            }
+                        });
                     } catch (error) {
                         console.error(`Error parsing GeoJSON for ${kecamatan.nama_kecamatan}:`,
                             error);

@@ -80,7 +80,22 @@
 
 <script>
     document.getElementById('logout-link').addEventListener('click', function(event) {
-        sessionStorage.clear();
-        localStorage.clear();
+        event.preventDefault();
+
+        Swal.fire({
+            icon: 'question',
+            title: 'Apakah Anda Yakin?',
+            text: 'Anda akan logout dari aplikasi.',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Logout',
+            cancelButtonText: 'Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                sessionStorage.clear();
+                localStorage.clear();
+                window.location.href = '{{ route('logout') }}';
+            }
+        });
     });
 </script>

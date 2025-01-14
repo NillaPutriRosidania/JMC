@@ -102,11 +102,8 @@ class AKBController extends Controller
             }
 
             foreach ($akbData as $idKecamatan => $newAkbValue) {
-                // Ambil data sebelumnya di tabel kmeans_akb
                 $existingData = DB::table('kmeans_akb')->where('id_kecamatan', $idKecamatan)->first();
                 $existingTotal = $existingData ? $existingData->grand_total_akb : 0;
-
-                // Hitung total baru
                 $grandTotalAkb = $existingTotal + $newAkbValue;
 
                 DB::table('kmeans_akb')->updateOrInsert(
@@ -126,7 +123,6 @@ class AKBController extends Controller
             return redirect()->route('akb.create')->with('error', 'Terjadi kesalahan saat menyimpan data.');
         }
     }
-
 
     public function edit($id_data_akb)
     {

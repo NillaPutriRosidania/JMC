@@ -31,6 +31,50 @@
             {{-- @include('partials.app.footer') --}}
         </main>
     </div>
+    <!-- SweetAlert2 Script -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @stack('scripts') <!-- For pushing additional scripts if needed -->
+
+    <!-- SweetAlert Trigger Script -->
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                showConfirmButton: true,
+                timer: 2500
+            });
+        </script>
+    @elseif(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                showConfirmButton: true,
+                timer: 2500
+            });
+        </script>
+    @elseif(session('confirm'))
+        <script>
+            Swal.fire({
+                icon: 'question',
+                title: 'Yakin?',
+                text: '{{ session('confirm') }}',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Lakukan aksi yang diinginkan jika yakin
+                    window.location.href = '{{ session('confirm_route') }}';
+                }
+            });
+        </script>
+    @endif
 </body>
 
 </html>

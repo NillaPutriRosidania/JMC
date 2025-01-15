@@ -12,11 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('data_akb', function (Blueprint $table) {
-            $table->id('id_data_akb');
+            $table->bigIncrements('id_data_akb');
             $table->unsignedBigInteger('id_puskesmas');
+            $table->unsignedInteger('id_kecamatan');
             $table->unsignedBigInteger('id_tahun');
             $table->integer('akb');
-            $table->timestamps();
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
+
+            // Foreign key constraints
+            $table->foreign('id_puskesmas')->references('id_puskesmas')->on('puskesmas')->onDelete('cascade');
+            $table->foreign('id_kecamatan')->references('id_kecamatan')->on('kecamatan')->onDelete('cascade');
+            $table->foreign('id_tahun')->references('id_tahun')->on('tahun')->onDelete('cascade');
         });
     }
 

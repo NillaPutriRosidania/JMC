@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tb_kecamatan', function (Blueprint $table) {
-            $table->id('id_kecamatan');
-            $table->string('nama_kecamatan');
-            $table->json('geojson')->nullable();
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 11, 8)->nullable();
-            $table->timestamps();
+            $table->increments('id_kecamatan');
+            $table->string('nama_kecamatan', 100)->charset('utf8mb4')->collation('utf8mb4_general_ci');
+            $table->longText('geojson')->nullable()->charset('utf8mb4')->collation('utf8mb4_bin');
+            $table->text('latitude')->charset('utf8mb4')->collation('utf8mb4_general_ci');
+            $table->text('longitude')->charset('utf8mb4')->collation('utf8mb4_general_ci');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('puskesmas', function (Blueprint $table) {
-            $table->bigIncrements('id_puskesmas');
-            $table->string('nama_puskesmas', 255)->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
+        Schema::create('kmeans_aki', function (Blueprint $table) {
+            $table->bigIncrements('id_kmeans_aki');
             $table->unsignedInteger('id_kecamatan');
-            $table->text('alamat_puskesmas')->nullable()->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
-            $table->text('lat')->nullable()->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
-            $table->text('long')->nullable()->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
+            $table->double('grand_total_aki');
+            $table->unsignedBigInteger('id_cluster')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
 
+            // Foreign key constraints
             $table->foreign('id_kecamatan')->references('id_kecamatan')->on('kecamatan')->onDelete('cascade');
+            $table->foreign('id_cluster')->references('id_cluster')->on('clusters')->onDelete('set null');
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('puskesmas');
+        //
     }
 };

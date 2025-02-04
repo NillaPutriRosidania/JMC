@@ -41,6 +41,10 @@ use App\Http\Controllers\AKBController;
 use App\Http\Controllers\AKIController;
 use App\Http\Controllers\KMeansAKBController;
 use App\Http\Controllers\KMeansAKIController;
+use App\Http\Controllers\KMeansAKI3Controller;
+use App\Http\Controllers\KMeansAKB3Controller;
+use App\Http\Controllers\KMeansAKI4Controller;
+use App\Http\Controllers\KMeansAKB4Controller;
 use App\Http\Controllers\PuskesmasController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -64,6 +68,10 @@ Route::get('/api/kecamatan/{type}', [MapsController::class, 'getKecamatanData'])
 // Rute yang dapat diakses tanpa login (tanpa middleware auth)
 Route::resource('kmeans_aki', KMeansAKIController::class);
 Route::resource('kmeans_akb', KMeansAKBController::class);
+Route::resource('kmeans_aki3', KMeansAKI3Controller::class);
+Route::resource('kmeans_akb3', KMeansAKB3Controller::class);
+Route::resource('kmeans_aki4', KMeansAKI4Controller::class);
+Route::resource('kmeans_akb4', KMeansAKB4Controller::class);
 
 // Grup middleware 'auth' untuk rute yang memerlukan login
 Route::middleware('auth')->group(function () {

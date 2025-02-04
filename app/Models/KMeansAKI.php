@@ -15,6 +15,8 @@ class KMeansAKI extends Model
         'id_kecamatan',
         'grand_total_aki',
         'id_cluster',
+        'id_cluster_3',
+        'id_cluster_4',
     ];
 
     public function kecamatan()

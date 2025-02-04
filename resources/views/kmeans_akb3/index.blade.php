@@ -1,6 +1,5 @@
 @extends(Auth::check() ? 'layouts.app' : 'layouts.dashboardguest')
-
-@section('title', 'Data KMeans AKB')
+@section('title', 'Data KMeans AKB 3')
 
 @section('content')
     <div class="container mx-auto p-4">
@@ -24,10 +23,7 @@
                             <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $kmeans->kecamatan->nama_kecamatan }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $kmeans->grand_total_akb }}</td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                {{ $kmeans->id_cluster ?? 'No Cluster Assigned' }}
-                            </td>
-
+                            <td class="border border-gray-300 px-4 py-2">{{ $kmeans->id_cluster_3 }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $kmeans->created_at }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $kmeans->updated_at }}</td>
                         </tr>
@@ -53,11 +49,13 @@
                     </thead>
                     <tbody>
                         @foreach ($iteration['centroids'] as $index => $centroid)
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                <td class="border border-gray-300 px-4 py-2">C{{ $index + 1 }}</td>
-                                <td class="border border-gray-300 px-4 py-2">{{ $centroid }}</td>
-                            </tr>
+                            @if ($index < 3)  {{-- Menampilkan hanya 3 cluster --}}
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">C{{ $index + 1 }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">{{ $centroid }}</td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
@@ -71,9 +69,9 @@
                         <tr class="bg-gray-200 text-left text-sm">
                             <th class="border border-gray-300 px-4 py-2">No</th>
                             <th class="border border-gray-300 px-4 py-2">Nama Kecamatan</th>
-                            @for ($i = 1; $i <= 5; $i++)
-                                <th class="border border-gray-300 px-4 py-2">C{{ $i }}</th>
-                            @endfor
+                            <th class="border border-gray-300 px-4 py-2">C1</th>
+                            <th class="border border-gray-300 px-4 py-2">C2</th>
+                            <th class="border border-gray-300 px-4 py-2">C3</th>
                             <th class="border border-gray-300 px-4 py-2">Min</th>
                             <th class="border border-gray-300 px-4 py-2">Cluster</th>
                         </tr>
@@ -84,7 +82,9 @@
                                 <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
                                 <td class="border border-gray-300 px-4 py-2">{{ $cluster['id_kecamatan'] }}</td>
                                 @foreach ($cluster['distances'] as $distance)
-                                    <td class="border border-gray-300 px-4 py-2">{{ number_format($distance, 2) }}</td>
+                                    @if ($loop->index < 3)  {{-- Menampilkan hanya 3 cluster --}}
+                                        <td class="border border-gray-300 px-4 py-2">{{ number_format($distance, 2) }}</td>
+                                    @endif
                                 @endforeach
                                 <td class="border border-gray-300 px-4 py-2">{{ number_format($cluster['min'], 2) }}</td>
                                 <td class="border border-gray-300 px-4 py-2">C{{ $cluster['cluster'] }}</td>
@@ -104,8 +104,6 @@
                         <th class="border border-gray-300 px-4 py-2">C1</th>
                         <th class="border border-gray-300 px-4 py-2">C2</th>
                         <th class="border border-gray-300 px-4 py-2">C3</th>
-                        <th class="border border-gray-300 px-4 py-2">C4</th>
-                        <th class="border border-gray-300 px-4 py-2">C5</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,9 +112,7 @@
                         $maxRows = max(
                             count($finalClusters['C1'] ?? []),
                             count($finalClusters['C2'] ?? []),
-                            count($finalClusters['C3'] ?? []),
-                            count($finalClusters['C4'] ?? []),
-                            count($finalClusters['C5'] ?? []),
+                            count($finalClusters['C3'] ?? [])
                         );
                     @endphp
                     @for ($i = 0; $i < $maxRows; $i++)
@@ -130,57 +126,18 @@
                             <td class="border border-gray-300 px-4 py-2">
                                 {{ $finalClusters['C3'][$i]->kecamatan->nama_kecamatan ?? '' }}
                             </td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                {{ $finalClusters['C4'][$i]->kecamatan->nama_kecamatan ?? '' }}
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                {{ $finalClusters['C5'][$i]->kecamatan->nama_kecamatan ?? '' }}
-                            </td>
                         </tr>
                     @endfor
                 </tbody>
             </table>
         </div>
 
-        <div class="container pt-8">
+        <div class="container">
             <div id="map"></div>
-            <div class="mt-4">
-                <h3 class="text-lg font-semibold mb-2">Keterangan Cluster</h3>
-                <table class="table-auto border-collapse border border-gray-400 w-full">
-                    <thead>
-                        <tr class="bg-gray-200">
-                            <th class="border border-gray-400 px-4 py-2 text-left">Cluster</th>
-                            <th class="border border-gray-400 px-4 py-2 text-left">Nama</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="border border-gray-400 px-4 py-2">Cluster 1</td>
-                            <td class="border border-gray-400 px-4 py-2">Sangat Rendah</td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-400 px-4 py-2">Cluster 2</td>
-                            <td class="border border-gray-400 px-4 py-2">Rendah</td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-400 px-4 py-2">Cluster 3</td>
-                            <td class="border border-gray-400 px-4 py-2">Biasa</td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-400 px-4 py-2">Cluster 4</td>
-                            <td class="border border-gray-400 px-4 py-2">Tinggi</td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-400 px-4 py-2">Cluster 5</td>
-                            <td class="border border-gray-400 px-4 py-2">Sangat Tinggi</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
-
     </div>
 @endsection
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -194,47 +151,19 @@
         function generateColor(clusterId) {
             const colors = {
                 1: '#0000FF',
-                2: '#008000',
-                3: '#FFFF00',
-                4: '#FFA500',
-                5: '#FF0000'
+                2: '#FF0000',
+                3: '#00FF00',
             };
             return colors[clusterId] || '#000000';
         }
-        fetch('/api/kecamatan/akb')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                data.forEach(kecamatan => {
-                    try {
-                        const geojson = JSON.parse(kecamatan.geojson);
-                        const layer = L.geoJSON(geojson, {
-                            style: function() {
-                                return {
-                                    color: generateColor(kecamatan
-                                        .id_cluster),
-                                    weight: 2,
-                                    fillOpacity: 0.5
-                                };
-                            }
-                        }).bindPopup(`<b>${kecamatan.nama_kecamatan}</b>`).addTo(map);
-                        layer.on('click', function() {
-                            if (kecamatan.id_cluster === 5) {
-                                Swal.fire({
-                                    title: "<strong style='font-size: 24px;'>AKI/AKB TINGGI</strong>", // Judul besar dan bold
-                                    icon: "warning",
-                                    html: "<p style='font-size: 14px;'>Jika AKI dan AKB tinggi, Dinas Kesehatan (Dinkes) akan meningkatkan kualitas pelayanan kesehatan, melakukan penyuluhan dan edukasi kesehatan, melatih tenaga medis, memperbaiki akses ke fasilitas kesehatan, menangani komplikasi, menyediakan program gizi, serta memantau kesehatan ibu dan bayi pasca persalinan untuk menurunkan angka kematian tersebut.</p>",
-                                    confirmButtonText: "OK",
-                                    confirmButtonColor: "#3085d6",
-                                });
-                            }
-                        });
-                    } catch (error) {
-                        console.error(`Error parsing GeoJSON for ${kecamatan.nama_kecamatan}:`,
-                            error);
-                    }
-                });
-            })
-            .catch(error => console.error('Error fetching GeoJSON:', error));
+
+        @foreach ($kmeansAkb as $kmeans)
+            L.marker([{{ $kmeans->kecamatan->latitude }}, {{ $kmeans->kecamatan->longitude }}], {
+                icon: L.divIcon({
+                    className: 'cluster-icon',
+                    html: '<div style="background-color:' + generateColor({{ $kmeans->id_cluster_3 }}) + ';"></div>'
+                })
+            }).addTo(map);
+        @endforeach
     });
 </script>

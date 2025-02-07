@@ -19,8 +19,6 @@ return new class extends Migration
             $table->integer('akb');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
-
-            // Foreign key constraints
             $table->foreign('id_puskesmas')->references('id_puskesmas')->on('puskesmas')->onDelete('cascade');
             $table->foreign('id_kecamatan')->references('id_kecamatan')->on('kecamatan')->onDelete('cascade');
             $table->foreign('id_tahun')->references('id_tahun')->on('tahun')->onDelete('cascade');

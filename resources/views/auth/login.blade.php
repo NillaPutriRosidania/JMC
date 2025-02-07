@@ -55,15 +55,7 @@
 
                     <div class="flex flex-col mt-5 mb-2">
                         <button type="submit"
-                            class="w w-full bg-primary rounded-md mb-2 h-12 text-white hover:bg-hover duration-500">Masuk</button>
-                        <div class="flex mt-3 items-center flex-row justify-center">
-                            <div class="flex mt-2 items-center flex-row justify-center">
-                                <p class="text-xs mr-2">Tidak mempunyai akun?</p>
-                                <a href="{{ route('register') }}"
-                                    class="text-xs text-primary outline-none underline duration-500">Daftar
-                                    Disini</a>
-                            </div>
-                        </div>
+                            class="w w-full bg-primary rounded-md mb-2 h-12 text-white hover:bg-opacity-50 duration-500">Masuk</button>
                     </div>
                 </form>
             </div>

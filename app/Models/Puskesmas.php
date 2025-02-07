@@ -9,9 +9,9 @@ class Puskesmas extends Model
 {
     use HasFactory;
 
-    protected $table = 'puskesmas'; // Sesuaikan dengan nama tabel di database
+    protected $table = 'puskesmas';
 
-    protected $primaryKey = 'id_puskesmas'; // Sesuaikan dengan primary key tabel
+    protected $primaryKey = 'id_puskesmas';
 
     protected $fillable = [
         'nama_puskesmas',

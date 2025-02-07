@@ -40,8 +40,6 @@ class DashboardController extends Controller
         $clusteringAkbKecamatan = KMeansAKB::select('id_cluster', 'id_kecamatan', DB::raw('SUM(grand_total_akb) as total_akb'))
             ->groupBy('id_cluster', 'id_kecamatan')
             ->get();
-
-        // dd($puskesmasList);
         return view('pages.dashboard.index', compact(
             'totalPuskesmas',
             'totalKecamatan',

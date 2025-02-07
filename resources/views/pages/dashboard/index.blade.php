@@ -4,36 +4,26 @@
 
 @section('content')
     <div class="container mx-auto px-4 py-6">
-        <!-- Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <!-- Total Puskesmas -->
             <div class="bg-white shadow-md rounded-lg p-4">
                 <h3 class="text-lg font-semibold">Total Puskesmas</h3>
                 <p class="text-3xl font-bold">{{ $totalPuskesmas }}</p>
             </div>
-
-            {{-- Total Kecamatan --}}
             <div class="bg-white shadow-md rounded-lg p-4">
                 <h3 class="text-lg font-semibold">Total Kecamatan</h3>
                 <p class="text-3xl font-bold">{{ $totalKecamatan }}</p>
             </div>
-
-            <!-- AKI Tertinggi -->
             <div class="bg-white shadow-md rounded-lg p-4">
                 <h3 class="text-lg font-semibold">AKI Tertinggi</h3>
                 <p class="text-2xl font-bold">{{ $akiTertinggi['value'] }}</p>
                 <p class="text-sm text-gray-500">{{ $akiTertinggi['nama_kecamatan'] }}</p>
             </div>
-
-            <!-- AKB Tertinggi -->
             <div class="bg-white shadow-md rounded-lg p-4">
                 <h3 class="text-lg font-semibold">AKB Tertinggi</h3>
                 <p class="text-2xl font-bold">{{ $akbTertinggi['value'] }}</p>
                 <p class="text-sm text-gray-500">{{ $akbTertinggi['nama_kecamatan'] }}</p>
             </div>
         </div>
-
-        <!-- Grafik Kenaikan AKI -->
         <div class="bg-white shadow-md rounded-lg p-6 mb-8">
             <h3 class="text-lg font-semibold mb-4">Grafik Kenaikan AKI</h3>
             <div class="flex items-center mb-4">
@@ -49,8 +39,6 @@
             </div>
             <canvas id="chart-aki" width="400" height="100"></canvas>
         </div>
-
-        <!-- Grafik Kenaikan AKB -->
         <div class="bg-white shadow-md rounded-lg p-6 mb-8">
             <h3 class="text-lg font-semibold mb-4">Grafik Kenaikan AKB</h3>
             <div class="flex items-center mb-4">
@@ -66,8 +54,6 @@
             </div>
             <canvas id="chart-akb" width="400" height="100"></canvas>
         </div>
-
-        <!-- Tabel Hasil Clustering AKI -->
         <div class="bg-white shadow-md rounded-lg p-6 mb-8">
             <h3 class="text-lg font-semibold mb-4">Hasil Clustering AKI</h3>
             <table class="table-auto w-full text-left border">
@@ -89,8 +75,6 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- Tabel Hasil Clustering AKB -->
         <div class="bg-white shadow-md rounded-lg p-6">
             <h3 class="text-lg font-semibold mb-4">Hasil Clustering AKB</h3>
             <table class="table-auto w-full text-left border">
@@ -113,20 +97,16 @@
             </table>
         </div>
     </div>
-
     <script>
         let akiChart, akbChart;
-
         function updateChart(type, puskesmasId) {
             console.log(`Type: ${type}, Puskesmas ID: ${puskesmasId}`);
             if (!puskesmasId) {
                 console.error('Puskesmas ID tidak valid:', puskesmasId);
                 return;
             }
-
             const url = `/api/charts/${type}/${puskesmasId}`;
             console.log(`Fetching data from: ${url}`);
-
             fetch(url)
                 .then(response => {
                     if (!response.ok) {
@@ -152,25 +132,17 @@
                     console.error('Fetch error:', error);
                 });
         }
-
-        // Pastikan canvas ada dan chart diinisialisasi setelah DOM siap
         document.addEventListener('DOMContentLoaded', () => {
             const akiCanvas = document.getElementById('chart-aki');
             const akbCanvas = document.getElementById('chart-akb');
 
-            // Pastikan canvas ada di halaman
             if (!akiCanvas || !akbCanvas) {
                 console.error("Canvas elements not found in DOM.");
                 return;
             }
-
             const ctxAki = akiCanvas.getContext('2d');
             const ctxAkb = akbCanvas.getContext('2d');
-
-            // Ambil ID Puskesmas pertama dari PHP
             const selectedPuskesmasId = {{ $selectedPuskesmas->id_puskesmas }};
-
-            // Inisialisasi chart untuk AKI dan AKB
             akiChart = new Chart(ctxAki, {
                 type: 'line',
                 data: {
@@ -191,7 +163,6 @@
                     }
                 }
             });
-
             akbChart = new Chart(ctxAkb, {
                 type: 'line',
                 data: {
@@ -212,12 +183,8 @@
                     }
                 }
             });
-
-            // Panggil updateChart untuk AKI dan AKB
             updateChart('aki', selectedPuskesmasId);
             updateChart('akb', selectedPuskesmasId);
         });
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endsection

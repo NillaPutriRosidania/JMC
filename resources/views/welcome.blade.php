@@ -293,13 +293,21 @@
         </div>
     </section>
 
-    <!-- Awal Maps -->
-    <section class="pt-36 pb-32 land bg-white" id="maps">
-        <div class="container">
+    <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
+        <div class="relative z-0">
             <div id="map"></div>
-        </div>
-    </section>
-    <!-- Akhir Maps -->
+        </div>        
+    </div>
+    
+    <div id="chat-icon" class="fixed bottom-5 right-5 bg-red-500 text-white p-5 text-4xl rounded-full shadow-lg cursor-pointer z-10">
+        💬
+    </div>    
+    
+    <div id="chat-container" class="fixed bottom-16 right-5 w-80 h-96 hidden z-20">
+        <iframe width="350" height="430" allow="microphone;" src="https://console.dialogflow.com/api-client/demo/embedded/74ef3aa5-da2f-458a-82bf-da699b3d8ab5"></iframe>
+    </div>
+    
+    
 
     </html>
 @endsection
@@ -368,3 +376,27 @@
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const chatIcon = document.getElementById("chat-icon");
+            const chatContainer = document.getElementById("chat-container");
+            const chatFrame = document.getElementById("chat-frame");
+    
+            // Menampilkan dan menyembunyikan chat saat icon diklik
+            chatIcon.addEventListener("click", function () {
+                chatContainer.classList.toggle("hidden");
+    
+                // Set iframe source hanya saat pertama kali dibuka
+                if (!chatFrame.src) {
+                    chatFrame.src = "https://console.dialogflow.com/api-client/demo/embedded/74ef3aa5-da2f-458a-82bf-da699b3d8ab5";
+                }
+            });
+    
+            // Menutup chat saat klik di luar area chat
+            document.addEventListener("click", function (event) {
+                if (!chatContainer.contains(event.target) && !chatIcon.contains(event.target)) {
+                    chatContainer.classList.add("hidden");
+                }
+            });
+        });
+    </script>

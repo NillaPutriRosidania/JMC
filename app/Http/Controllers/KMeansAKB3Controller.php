@@ -58,7 +58,7 @@ class KMeansAKB3Controller extends Controller
         DB::transaction(function () use ($clusters) {
             foreach ($clusters as $cluster) {
                 KMeansAKB::where('id_kmeans_akb', $cluster['id'])->update([
-                    'id_cluster_3' => $cluster['cluster'] + 1,  // Menambahkan 1 untuk memetakan ke cluster 2, 3, 4
+                    'id_cluster_3' => $cluster['cluster'] + 1,
                     'grand_total_akb' => $cluster['grand_total_akb'],
                 ]);
             }

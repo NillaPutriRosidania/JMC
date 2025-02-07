@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KMeansAKI; // Tetap menggunakan model KMeansAKI
+use App\Models\KMeansAKI;
 use App\Models\Kecamatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -68,10 +68,10 @@ class KMeansAKI4Controller extends Controller
 
         $finalClusters = $kmeansAki->groupBy('id_cluster_4');
         $finalClusters = [
-            'C1' => $finalClusters->get(2, collect([])),  // Cluster 1
-            'C2' => $finalClusters->get(3, collect([])),  // Cluster 2
-            'C3' => $finalClusters->get(4, collect([])),  // Cluster 4
-            'C4' => $finalClusters->get(5, collect([])),  // Cluster 5
+            'C1' => $finalClusters->get(2, collect([])),
+            'C2' => $finalClusters->get(3, collect([])),
+            'C3' => $finalClusters->get(4, collect([])),
+            'C4' => $finalClusters->get(5, collect([])),
         ];
 
         return view('kmeans_aki4.index', compact('kmeansAki', 'iterations', 'finalClusters'));

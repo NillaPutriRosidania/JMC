@@ -5,99 +5,28 @@
     <div class="container mx-auto p-4">
         <h2 class="text-lg font-bold text-center text-red-600 mb-4">Data KMeans AKB</h2>
 
-        <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
-            <table class="w-full table-auto border-collapse border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200 text-left text-sm">
-                        <th class="border border-gray-300 px-4 py-2">NO</th>
-                        <th class="border border-gray-300 px-4 py-2">Nama Kecamatan</th>
-                        <th class="border border-gray-300 px-4 py-2">Grand Total AKB</th>
-                        <th class="border border-gray-300 px-4 py-2">ID Cluster</th>
-                        <th class="border border-gray-300 px-4 py-2">Created At</th>
-                        <th class="border border-gray-300 px-4 py-2">Updated At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($kmeansAkb as $kmeans)
-                        <tr>
-                            <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $kmeans->kecamatan->nama_kecamatan }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $kmeans->grand_total_akb }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $kmeans->id_cluster_4 }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $kmeans->created_at }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $kmeans->updated_at }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="flex items-center w-full md:w-auto mb-4">
+            <label for="cluster" class="mr-2">Pilih Cluster:</label>
+            <select id="cluster" class="p-2 border border-gray-300 rounded-lg">
+                <option value="kmeans_akb3">3 Cluster</option>
+                <option value="kmeans_akb4"selected>4 Cluster</option>
+                <option value="kmeans_akb">5 Cluster</option>
+            </select>
         </div>
-        @foreach ($iterations as $iteration)
-            <h2 class="text-lg font-bold text-gray-700 mt-6 mb-2">Iterasi {{ $iteration['iteration'] }}</h2>
-            <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
-                <h3 class="text-md font-bold text-gray-700">Centroid</h3>
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-200 text-left text-sm">
-                            <th class="border border-gray-300 px-4 py-2">No</th>
-                            <th class="border border-gray-300 px-4 py-2">Cluster</th>
-                            <th class="border border-gray-300 px-4 py-2">Grand Total AKB</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($iteration['centroids'] as $index => $centroid)
-                            @if ($index < 4)
-                                <tr>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">C{{ $index + 1 }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $centroid }}</td>
-                                </tr>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
-                <h3 class="text-md font-bold text-gray-700">Hasil Iterasi</h3>
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-200 text-left text-sm">
-                            <th class="border border-gray-300 px-4 py-2">No</th>
-                            <th class="border border-gray-300 px-4 py-2">Nama Kecamatan</th>
-                            <th class="border border-gray-300 px-4 py-2">C1</th>
-                            <th class="border border-gray-300 px-4 py-2">C2</th>
-                            <th class="border border-gray-300 px-4 py-2">C3</th>
-                            <th class="border border-gray-300 px-4 py-2">C4</th>
-                            <th class="border border-gray-300 px-4 py-2">Min</th>
-                            <th class="border border-gray-300 px-4 py-2">Cluster</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($iteration['clusters'] as $index => $cluster)
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                <td class="border border-gray-300 px-4 py-2">{{ $cluster['id_kecamatan'] }}</td>
-                                @foreach ($cluster['distances'] as $distance)
-                                    @if ($loop->index < 4)
-                                        <td class="border border-gray-300 px-4 py-2">{{ number_format($distance, 2) }}</td>
-                                    @endif
-                                @endforeach
-                                <td class="border border-gray-300 px-4 py-2">{{ number_format($cluster['min'], 2) }}</td>
-                                <td class="border border-gray-300 px-4 py-2">C{{ $cluster['cluster'] }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endforeach
+        <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
+            <div class="relative">
+                <div id="map"></div>
+            </div>            
+        </div>
         <div class="bg-white p-4 mt-6 border-2 border-gray-200 rounded-lg">
             <h2 class="text-lg font-bold text-gray-700 mb-4">Tabel Hasil Clustering</h2>
             <table class="w-full border-collapse border border-gray-300">
                 <thead>
                     <tr class="bg-gray-200 text-left text-sm">
-                        <th class="border border-gray-300 px-4 py-2">C1</th>
-                        <th class="border border-gray-300 px-4 py-2">C2</th>
-                        <th class="border border-gray-300 px-4 py-2">C3</th>
-                        <th class="border border-gray-300 px-4 py-2">C4</th>
+                        <th class="border border-gray-300 px-4 py-2" style="background-color: #008000;">Sangat Rendah</th>
+                        <th class="border border-gray-300 px-4 py-2" style="background-color: #FFE31A;">Rendah</th>
+                        <th class="border border-gray-300 px-4 py-2" style="background-color: #F14A00;">Tinggi</th>
+                        <th class="border border-gray-300 px-4 py-2" style="background-color: #FF0000;">Sangat Tinggi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,10 +57,112 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="container">
-            <div id="map"></div>
+        <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
+            <table class="w-full table-auto border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200 text-left text-sm">
+                        <th class="border border-gray-300 px-4 py-2">NO</th>
+                        <th class="border border-gray-300 px-4 py-2">Nama Kecamatan</th>
+                        <th class="border border-gray-300 px-4 py-2">Grand Total AKB</th>
+                        <th class="border border-gray-300 px-4 py-2">ID Cluster</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($kmeansAkb as $kmeans)
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $kmeans->kecamatan->nama_kecamatan }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $kmeans->grand_total_akb }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $kmeans->id_cluster_4 }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+        <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
+            <div class="tabs m-4">
+                <ul class="flex space-x-4 w-full">
+                    @foreach ($iterations as $key => $iteration)
+                        <li class="inline-block w-full">
+                            <button 
+                                class="px-4 py-3 rounded-lg text-gray-900 hover:bg-gray-100 dark:hover:bg-red-600 dark:hover:text-white
+                                    {{ $loop->first ? 'bg-red-600 text-white' : 'bg-white text-gray-500' }} font-semibold tab-link"
+                                onclick="showTabContent('tab-{{ $key }}', {{ $key }})">
+                                Iterasi {{ $iteration['iteration'] }}
+                            </button>
+                        </li>
+                    @endforeach
+                </ul>
+                @foreach ($iterations as $key => $iteration)
+                    <div id="tab-{{ $key }}" class="tab-content hidden">
+                        <h2 class="text-lg font-bold text-gray-700 mt-6 mb-2">Iterasi {{ $iteration['iteration'] }}</h2>
+                        
+                        <!-- Centroids Table -->
+                        <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
+                            <h3 class="text-md font-bold text-gray-700">Centroid</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse border border-gray-300">
+                                    <thead>
+                                        <tr class="bg-gray-200 text-left text-sm">
+                                            <th class="border border-gray-300 px-4 py-2">No</th>
+                                            <th class="border border-gray-300 px-4 py-2">Cluster</th>
+                                            <th class="border border-gray-300 px-4 py-2">Grand Total AKB</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($iteration['centroids'] as $index => $centroid)
+                                            @if ($index < 10)
+                                                <tr>
+                                                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
+                                                    <td class="border border-gray-300 px-4 py-2">C{{ $index + 1 }}</td>
+                                                    <td class="border border-gray-300 px-4 py-2">{{ $centroid }}</td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+        
+                        <!-- Cluster Results Table -->
+                        <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
+                            <h3 class="text-md font-bold text-gray-700">Hasil Iterasi</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse border border-gray-300">
+                                    <thead>
+                                        <tr class="bg-gray-200 text-left text-sm">
+                                            <th class="border border-gray-300 px-4 py-2">No</th>
+                                            <th class="border border-gray-300 px-4 py-2">Nama Kecamatan</th>
+                                            <th class="border border-gray-300 px-4 py-2">C1</th>
+                                            <th class="border border-gray-300 px-4 py-2">C2</th>
+                                            <th class="border border-gray-300 px-4 py-2">C3</th>
+                                            <th class="border border-gray-300 px-4 py-2">C4</th>
+                                            <th class="border border-gray-300 px-4 py-2">Min</th>
+                                            <th class="border border-gray-300 px-4 py-2">Cluster</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($iteration['clusters'] as $index => $cluster)
+                                            <tr>
+                                                <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
+                                                <td class="border border-gray-300 px-4 py-2">{{ $cluster['id_kecamatan'] }}</td>
+                                                @foreach ($cluster['distances'] as $distance)
+                                                    @if ($loop->index < 4)
+                                                        <td class="border border-gray-300 px-4 py-2">{{ number_format($distance, 2) }}</td>
+                                                    @endif
+                                                @endforeach
+                                                <td class="border border-gray-300 px-4 py-2">{{ number_format($cluster['min'], 2) }}</td>
+                                                <td class="border border-gray-300 px-4 py-2">C{{ $cluster['cluster'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div> 
     </div>
 @endsection
 
@@ -139,6 +170,14 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+
+        document.getElementById('cluster').addEventListener('change', function() {
+            var selectedValue = this.value;
+            if (selectedValue) {
+                window.location.href = '/' + selectedValue;
+            }
+        });
+        
         var map = L.map('map').setView([-8.1845, 113.6681], 11);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -148,19 +187,76 @@
         function generateColor(clusterId) {
             const colors = {
                 1: '#0000FF',
-                2: '#FF0000',
-                3: '#00FF00',
+                2: '#008000',
+                3: '#FFFF00',
+                4: '#FFA500',
+                5: '#FF0000'
             };
             return colors[clusterId] || '#000000';
         }
-
-        @foreach ($kmeansAkb as $kmeans)
-            L.marker([{{ $kmeans->kecamatan->latitude }}, {{ $kmeans->kecamatan->longitude }}], {
-                icon: L.divIcon({
-                    className: 'cluster-icon',
-                    html: '<div style="background-color:' + generateColor({{ $kmeans->id_cluster_4 }}) + ';"></div>'
-                })
-            }).addTo(map);
-        @endforeach
+        fetch('/api/kecamatan/akb')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.forEach(kecamatan => {
+                    try {
+                        const geojson = JSON.parse(kecamatan.geojson);
+                        const layer = L.geoJSON(geojson, {
+                            style: function() {
+                                return {
+                                    color: generateColor(kecamatan
+                                        .id_cluster_4),
+                                    weight: 2,
+                                    fillOpacity: 0.5
+                                };
+                            }
+                        }).bindPopup(`<b>${kecamatan.nama_kecamatan}</b>`).addTo(map);
+                        layer.on('click', function() {
+                            if (kecamatan.id_cluster === 5) {
+                                Swal.fire({
+                                    title: "<strong style='font-size: 24px;'>AKI/AKB TINGGI</strong>", // Judul besar dan bold
+                                    icon: "warning",
+                                    html: "<p style='font-size: 14px;'>Jika AKI dan AKB tinggi, Dinas Kesehatan (Dinkes) akan meningkatkan kualitas pelayanan kesehatan, melakukan penyuluhan dan edukasi kesehatan, melatih tenaga medis, memperbaiki akses ke fasilitas kesehatan, menangani komplikasi, menyediakan program gizi, serta memantau kesehatan ibu dan bayi pasca persalinan untuk menurunkan angka kematian tersebut.</p>",
+                                    confirmButtonText: "OK",
+                                    confirmButtonColor: "#3085d6",
+                                });
+                            }
+                        });
+                    } catch (error) {
+                        console.error(`Error parsing GeoJSON for ${kecamatan.nama_kecamatan}:`,
+                            error);
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching GeoJSON:', error));
     });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        showTabContent('tab-0');
+        setActiveTab(0);
+    });
+    function showTabContent(tabId, activeTabIndex) {
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => {
+            content.classList.add('hidden');
+        });
+        const activeTabContent = document.getElementById(tabId);
+        if (activeTabContent) {
+            activeTabContent.classList.remove('hidden');
+        }
+        setActiveTab(activeTabIndex);
+    }
+    function setActiveTab(activeTabIndex) {
+        const allTabs = document.querySelectorAll('button.tab-link');
+        allTabs.forEach((tab, index) => {
+            if (index === activeTabIndex) {
+                tab.classList.add('bg-red-600', 'text-white');
+                tab.classList.remove('bg-white', 'text-gray-500');
+            } else {
+                tab.classList.remove('bg-red-600', 'text-white');
+                tab.classList.add('bg-white', 'text-gray-500');
+            }
+        });
+    }
 </script>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KMeansAKB; // Model AKB
+use App\Models\KMeansAKB;
 use App\Models\Kecamatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

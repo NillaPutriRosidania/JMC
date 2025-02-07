@@ -9,7 +9,7 @@ class KMeansAKB extends Model
 {
     use HasFactory;
 
-    protected $table = 'kmeans_akb'; // Nama tabel di database
+    protected $table = 'kmeans_akb';
     protected $primaryKey = 'id_kmeans_akb';
     protected $fillable = [
         'id_kecamatan',

@@ -97,7 +97,7 @@ class AKIController extends Controller
                     ['id_kecamatan' => $idKecamatan],
                     [
                         'grand_total_aki' => $grandTotalAki,
-                        'id_cluster' => null, // Biarkan null sampai ada proses clustering
+                        'id_cluster' => null,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]

@@ -27,4 +27,8 @@ class KMeansAKI extends Model
     {
         return $this->belongsTo(Puskesmas::class, 'id_puskesmas');
     }
+    public function cluster()
+    {
+        return $this->belongsTo(Cluster::class, 'id_cluster', 'id_cluster');
+    }
 }

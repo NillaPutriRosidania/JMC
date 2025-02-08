@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AKB;
 use App\Models\AKI;
+use App\Models\Berita;
 use App\Models\ClusteringAki;
 use App\Models\ClusteringAkb;
 use App\Models\Puskesmas;
@@ -17,6 +18,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $berita = Berita::latest()->paginate(5);
         $totalPuskesmas = Puskesmas::count();
         $totalKecamatan = Kecamatan::count();
         $akiTertinggi = KMeansAKI::select('kmeans_aki.grand_total_aki as value', 'kmeans_aki.id_kecamatan', DB::raw('tb_kecamatan.nama_kecamatan'))
@@ -33,13 +35,27 @@ class DashboardController extends Controller
         $puskesmasList = Puskesmas::all();
         $selectedPuskesmas = Puskesmas::first();
 
-        $clusteringAkiKecamatan = KMeansAKI::select('id_cluster', 'id_kecamatan', DB::raw('SUM(grand_total_aki) as total_aki'))
-            ->groupBy('id_cluster', 'id_kecamatan')
+        $clusteringAkiKecamatan = KMeansAKI::select(
+            DB::raw('COALESCE(cluster.nama_cluster, "Tidak Diketahui") as nama_cluster'),
+            'kmeans_aki.id_kecamatan',
+            DB::raw('SUM(kmeans_aki.grand_total_aki) as total_aki'),
+            'tb_kecamatan.nama_kecamatan'
+        )
+            ->leftJoin('cluster', 'cluster.id_cluster', '=', 'kmeans_aki.id_cluster')
+            ->leftJoin('tb_kecamatan', 'tb_kecamatan.id_kecamatan', '=', 'kmeans_aki.id_kecamatan')
+            ->groupBy('cluster.nama_cluster', 'kmeans_aki.id_kecamatan', 'tb_kecamatan.nama_kecamatan')
             ->get();
 
-        $clusteringAkbKecamatan = KMeansAKB::select('id_cluster', 'id_kecamatan', DB::raw('SUM(grand_total_akb) as total_akb'))
-            ->groupBy('id_cluster', 'id_kecamatan')
+        $clusteringAkbKecamatan = KMeansAKB::select(
+            DB::raw('cluster.nama_cluster as cluster_name'),
+            'kmeans_akb.id_kecamatan',
+            DB::raw('SUM(kmeans_akb.grand_total_akb) as total_akb')
+        )
+            ->join('cluster', 'cluster.id_cluster', '=', 'kmeans_akb.id_cluster')
+            ->groupBy('cluster.nama_cluster', 'kmeans_akb.id_kecamatan')
             ->get();
+
+
         return view('pages.dashboard.index', compact(
             'totalPuskesmas',
             'totalKecamatan',
@@ -50,7 +66,8 @@ class DashboardController extends Controller
             'puskesmasList',
             'selectedPuskesmas',
             'clusteringAkiKecamatan',
-            'clusteringAkbKecamatan'
+            'clusteringAkbKecamatan',
+            'berita'
         ));
     }
 

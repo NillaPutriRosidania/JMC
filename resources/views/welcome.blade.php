@@ -3,7 +3,6 @@
 @section('title', 'JMC')
 
 @section('content')
-    <!-- Awal Home Section -->
     <section class="pt-36 pb-36 land" id="home" class="section_home">
         <div class="container">
             <div class="flex flex-wrap">
@@ -44,9 +43,6 @@
             </div>
         </div>
     </section>
-    <!-- Akhir Home Section -->
-
-    <!-- Awal tentang -->
     <section class="lg:pt-36 pb-32 land" id="tentang">
         <div class="container">
             <div class="flex flex-wrap lg:flex-nowrap">
@@ -125,9 +121,6 @@
             </div>
         </div>
     </section>
-    <!-- Akhir Tentang -->
-
-    <!-- Awal Layanan -->
     <section class="pt-36 pb-32 land bg-secondary" id="layanan">
         <div class="container">
             <div class="w-full px-4">
@@ -210,9 +203,6 @@
 
         </div>
     </section>
-    <!-- Akhir Layanan -->
-
-    <!-- Awal Cara Kerja -->
     <section class="pt-36 pb-32 land" id="carakerja">
         <div class="container">
             <div
@@ -292,23 +282,50 @@
             </div>
         </div>
     </section>
-
     <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
         <div class="relative z-0">
             <div id="map"></div>
         </div>        
     </div>
-    
     <div id="chat-icon" class="fixed bottom-5 right-5 bg-red-500 text-white p-5 text-4xl rounded-full shadow-lg cursor-pointer z-10">
         💬
     </div>    
-    
     <div id="chat-container" class="fixed bottom-16 right-5 w-80 h-96 hidden z-20">
         <iframe width="350" height="430" allow="microphone;" src="https://console.dialogflow.com/api-client/demo/embedded/74ef3aa5-da2f-458a-82bf-da699b3d8ab5"></iframe>
     </div>
+    <div class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6">Berita Terbaru</h2>
+    
+        @foreach ($latestNews as $item)
+            <div class="flex items-start bg-white shadow-md rounded-lg overflow-hidden mb-6">
+                <img src="{{ asset('storage/' . $item->gambar) }}" alt="News Image" class="w-40 h-40 object-cover">
+    
+                <div class="p-4 flex-1">
+                    <p class="text-red-600 font-semibold text-sm">
+                        {{ $item->kategori }} <span class="text-gray-500 ml-2">{{ $item->created_at->format('d M Y') }}</span>
+                    </p>
+    
+                    <h3 class="text-lg font-bold mt-1">{{ $item->judul }}</h3>
+                    <p class="text-sm text-gray-700 mt-1">
+                        {{ Str::limit($item->isi, 150) }}
+                    </p>
+    
+                    <div class="mt-3 flex flex-wrap">
+                        @foreach (explode(',', $item->keyword) as $keyword)
+                            <span class="bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full mr-2 mb-2">{{ $keyword }}</span>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    
+        <!-- Pagination -->
+        <div class="mt-4 flex justify-center">
+            {{ $latestNews->links() }}
+        </div>
+    </div>
     
     
-
     </html>
 @endsection
 <script>

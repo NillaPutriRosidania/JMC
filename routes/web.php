@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\AKBController;
 use App\Http\Controllers\AKIController;
 use App\Http\Controllers\KMeansAKBController;
@@ -14,10 +15,14 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\MapsController;
 use App\Http\Controllers\TahunController;
+use App\Models\Berita;
 
 Route::get('/', function () {
-    return view('welcome');
+    $latestNews = Berita::latest()->paginate(5);
+    $mapData = (new MapsController)->getKecamatanData();
+    return view('welcome', compact('latestNews', 'mapData'));
 });
+
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('login', [AuthController::class, 'show']);

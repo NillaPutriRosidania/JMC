@@ -28,4 +28,9 @@ class Kecamatan extends Model
         'longitude' => 'decimal:8',
         'geojson' => 'array',
     ];
+
+    public function clusters()
+    {
+        return $this->hasMany(Cluster::class, 'id_kecamatan', 'id_cluster');
+    }
 }

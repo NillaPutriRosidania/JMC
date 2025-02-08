@@ -53,6 +53,12 @@
                             Tahun
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('berita.index') }}"
+                            class="@if (Route::is('berita.index')) bg-white text-red-500 @else text-white @endif flex items-center p-2 pl-11 w-full text-base font-medium rounded-lg transition duration-75 group hover:bg-white hover:text-red-500">
+                            Berita
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li>

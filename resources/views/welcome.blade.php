@@ -134,11 +134,38 @@
                 </div>
             </div>
             <div class="flex flex-wrap justify-center">
-                <!-- Menu Pemetaan Angka Kematian -->
+                <!-- Menu Visualisasi dengan GIS -->
                 <div class="w-full px-4 lg:w-1/2 xl:w-1/3">
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-10">
                         <div class="pt-4 px-16">
                             <img width="360" height="200" src="{{ asset('assets/img/logo_pemetaan.png') }}"
+                                alt="Visualisasi GIS" class="w-full" />
+                        </div>
+                        <div class="py-8 px-6">
+                            <h5>
+                                <a href="#layanan"
+                                    class="block mb-3 font-semibold text-xl text-dark hover:text-primary truncate">
+                                    VISUALISASI DENGAN GIS
+                                </a>
+                            </h5>
+                            <p class="font-medium text-base text-secondary mb-6">
+                                Aplikasi "Jember Maternal Cluster" menyediakan fitur visualisasi berbasis Sistem Informasi Geografis (SIG)
+                                untuk membantu pengguna memahami pola distribusi angka kematian ibu dan bayi di Kabupaten Jember.
+                                <span class="hidden-text">
+                                    Dengan teknologi GIS, data yang diperoleh dapat divisualisasikan dalam bentuk peta interaktif,
+                                    sehingga mempermudah analisis dan pengambilan keputusan yang lebih efektif.
+                                </span>
+                            </p>
+                            <span class="read-more-btn">Baca Selengkapnya</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menu Pemetaan Angka Kematian -->
+                <div class="w-full px-4 lg:w-1/2 xl:w-1/3">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-10">
+                        <div class="pt-4">
+                            <img width="360" height="200" src="{{ asset('assets/img/analisis.png') }}"
                                 alt="Pemetaan" class="w-full" />
                         </div>
                         <div class="py-8 px-6">
@@ -149,50 +176,12 @@
                                 </a>
                             </h5>
                             <p class="font-medium text-base text-secondary mb-6">
-                                Aplikasi "Jember Maternal Cluster" menawarkan fitur pemetaan interaktif untuk angka kematian
-                                ibu dan bayi
-                                menggunakan metode K-Means Clustering. Fitur ini memungkinkan pengguna untuk menganalisis
-                                dan mengidentifikasi
+                                Aplikasi ini menggunakan metode K-Means Clustering untuk menganalisis dan mengidentifikasi
                                 area dengan tingkat risiko tinggi di Kabupaten Jember.
                                 <span class="hidden-text">
-                                    Data yang diolah meliputi lokasi geografis, jumlah kematian, dan faktor pendukung
-                                    lainnya.
-                                    Dengan visualisasi berbasis Sistem Informasi Geografis (SIG), pengguna dapat memahami
-                                    pola dan tren
+                                    Data yang diolah meliputi lokasi geografis dan jumlah kematian.
+                                    Dengan visualisasi berbasis GIS, pengguna dapat memahami pola dan tren
                                     yang membantu pengambilan keputusan dalam meningkatkan kesehatan maternal dan neonatal.
-                                </span>
-                            </p>
-                            <span class="read-more-btn">Baca Selengkapnya</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Menu Analisis Kematian Ibu dan Bayi -->
-                <div class="w-full px-4 lg:w-1/2 xl:w-1/3">
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-10">
-                        <div class="pt-4">
-                            <img width="360" height="200" src="{{ asset('assets/img/analisis.png') }}"
-                                alt="Analisis" class="w-full" />
-                        </div>
-                        <div class="py-8 px-6">
-                            <h5>
-                                <a href="#layanan"
-                                    class="block mb-3 font-semibold text-xl text-dark hover:text-primary truncate">
-                                    ANALISIS KEMATIAN IBU DAN BAYI
-                                </a>
-                            </h5>
-                            <p class="font-medium text-base text-secondary mb-6">
-                                Melalui menu analisis, aplikasi ini menyediakan kalkulasi berbasis data untuk memahami
-                                faktor risiko
-                                kematian ibu dan bayi. Pengguna dapat memasukkan data jumlah kematian, penyebab utama, serta
-                                parameter lain
-                                yang relevan.
-                                <span class="hidden-text">
-                                    Hasil analisis meliputi rekomendasi tindakan preventif, estimasi sumber daya yang
-                                    diperlukan,
-                                    dan prediksi dampak dari program kesehatan yang diterapkan. Dengan alat ini, instansi
-                                    terkait dapat
-                                    membuat kebijakan berbasis data yang lebih efektif untuk menurunkan angka kematian.
                                 </span>
                             </p>
                             <span class="read-more-btn">Baca Selengkapnya</span>
@@ -325,10 +314,6 @@
             {{ $latestNews->links() }}
         </div>
     </div>
-    
-    
-    
-    </html>
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {

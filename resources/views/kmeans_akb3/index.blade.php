@@ -59,7 +59,7 @@
                     <tr class="bg-gray-200 text-left text-sm">
                         <th class="border border-gray-300 px-4 py-2">NO</th>
                         <th class="border border-gray-300 px-4 py-2">Nama Kecamatan</th>
-                        <th class="border border-gray-300 px-4 py-2">Grand Total AKB</th>
+                        <th class="border border-gray-300 px-4 py-2">Grand Total AKB (Bayi)</th>
                         <th class="border border-gray-300 px-4 py-2">ID Cluster</th>
                     </tr>
                 </thead>
@@ -102,7 +102,7 @@
                                         <tr class="bg-gray-200 text-left text-sm">
                                             <th class="border border-gray-300 px-4 py-2">No</th>
                                             <th class="border border-gray-300 px-4 py-2">Cluster</th>
-                                            <th class="border border-gray-300 px-4 py-2">Grand Total AKB</th>
+                                            <th class="border border-gray-300 px-4 py-2">Grand Total AKB (Bayi)</th>
                                         </tr>
                                     </thead>
                                     <tbody>

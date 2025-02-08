@@ -95,7 +95,7 @@
                     <tr>
                         <th class="px-4 py-2 border border-red-700">Kecamatan</th>
                         <th class="px-4 py-2 border border-red-700">Cluster</th>
-                        <th class="px-4 py-2 border border-red-700">Grand Total AKI</th>
+                        <th class="px-4 py-2 border border-red-700">Grand Total AKI (Ibu)</th>
                     </tr>
                 </thead>                
                 <tbody>
@@ -116,7 +116,7 @@
                     <tr>
                         <th class="px-4 py-2 border border-red-700">Kecamatan</th>
                         <th class="px-4 py-2 border border-red-700">Cluster</th>
-                        <th class="px-4 py-2 border border-red-700">Grand Total AKB</th>
+                        <th class="px-4 py-2 border border-red-700">Grand Total AKB (Bayi)</th>
                     </tr>
                 </thead>
                 <tbody>

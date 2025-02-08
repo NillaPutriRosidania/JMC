@@ -297,7 +297,8 @@
         <h2 class="text-2xl font-bold mb-6">Berita Terbaru</h2>
     
         @foreach ($latestNews as $item)
-            <div class="flex items-start bg-white shadow-md rounded-lg overflow-hidden mb-6">
+            <!-- Bungkus dengan tag <a> untuk membuatnya jadi link ke detail berita -->
+            <a href="{{ route('berita.show', $item->id) }}" class="flex items-start bg-white shadow-md rounded-lg overflow-hidden mb-6">
                 <img src="{{ asset('storage/' . $item->gambar) }}" alt="News Image" class="w-40 h-40 object-cover">
     
                 <div class="p-4 flex-1">
@@ -316,7 +317,7 @@
                         @endforeach
                     </div>
                 </div>
-            </div>
+            </a>
         @endforeach
     
         <!-- Pagination -->
@@ -324,6 +325,7 @@
             {{ $latestNews->links() }}
         </div>
     </div>
+    
     
     
     </html>
@@ -398,18 +400,12 @@
             const chatIcon = document.getElementById("chat-icon");
             const chatContainer = document.getElementById("chat-container");
             const chatFrame = document.getElementById("chat-frame");
-    
-            // Menampilkan dan menyembunyikan chat saat icon diklik
             chatIcon.addEventListener("click", function () {
                 chatContainer.classList.toggle("hidden");
-    
-                // Set iframe source hanya saat pertama kali dibuka
                 if (!chatFrame.src) {
                     chatFrame.src = "https://console.dialogflow.com/api-client/demo/embedded/74ef3aa5-da2f-458a-82bf-da699b3d8ab5";
                 }
             });
-    
-            // Menutup chat saat klik di luar area chat
             document.addEventListener("click", function (event) {
                 if (!chatContainer.contains(event.target) && !chatIcon.contains(event.target)) {
                     chatContainer.classList.add("hidden");

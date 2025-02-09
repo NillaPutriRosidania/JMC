@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\KMeansAKB;
-use App\Models\Kecamatan;
-use Illuminate\Http\Request;
+use App\Exports\GeneralExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 
 class KMeansAKB3Controller extends Controller
@@ -70,5 +70,22 @@ class KMeansAKB3Controller extends Controller
             'C3' => $finalClusters->get(4, collect([])),
         ];
         return view('kmeans_akb3.index', compact('kmeansAkb', 'iterations', 'finalClusters'));
+    }
+    public function exportData()
+    {
+        $data = KMeansAKB::with(['kecamatan', 'cluster'])->get()->map(function ($item) {
+            $namaKecamatan = $item->kecamatan->nama_kecamatan ?? 'N/A';
+            $namaCluster3 = $item->cluster->where('id_cluster', $item->id_cluster_3)->first()->nama_cluster ?? 'N/A';
+            $grandTotalAkb = $item->grand_total_akb ?? 'N/A';
+
+            return [
+                'nama_kecamatan' => $namaKecamatan,
+                'nama_cluster_3' => $namaCluster3,
+                'grand_total_akb' => $grandTotalAkb,
+            ];
+        });
+
+        $headings = ['Nama Kecamatan', 'Cluster', 'Grand Total AKB'];
+        return Excel::download(new GeneralExport($data, $headings), 'data_export_cluster3.xlsx');
     }
 }

@@ -4,7 +4,6 @@
 @section('content')
     <div class="container mx-auto p-4">
         <h2 class="text-lg font-bold text-center text-red-600 mb-4">Data KMeans AKB</h2>
-
         <div class="flex items-center w-full md:w-auto mb-4">
             <label for="cluster" class="mr-2">Pilih Cluster:</label>
             <select id="cluster" class="p-2 border border-gray-300 rounded-lg">
@@ -12,6 +11,9 @@
                 <option value="kmeans_akb4"selected>4 Cluster</option>
                 <option value="kmeans_akb">5 Cluster</option>
             </select>
+        </div>
+        <div class="flex space-x-2 mb-4">
+            <a href="{{ route('export.kmeans.akb4') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Export KMeans AKB</a>
         </div>
         <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
             <div class="relative">
@@ -96,8 +98,6 @@
                 @foreach ($iterations as $key => $iteration)
                     <div id="tab-{{ $key }}" class="tab-content hidden">
                         <h2 class="text-lg font-bold text-gray-700 mt-6 mb-2">Iterasi {{ $iteration['iteration'] }}</h2>
-                        
-                        <!-- Centroids Table -->
                         <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
                             <h3 class="text-md font-bold text-gray-700">Centroid</h3>
                             <div class="overflow-x-auto">
@@ -123,8 +123,6 @@
                                 </table>
                             </div>
                         </div>
-        
-                        <!-- Cluster Results Table -->
                         <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
                             <h3 class="text-md font-bold text-gray-700">Hasil Iterasi</h3>
                             <div class="overflow-x-auto">

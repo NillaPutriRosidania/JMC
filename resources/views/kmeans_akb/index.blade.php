@@ -13,7 +13,7 @@
                 <option value="kmeans_akb" selected>5 Cluster</option>
             </select>
         </div>
-        <div class="flex space-x-2">
+        <div class="flex space-x-2 mb-4">
             <a href="{{ route('export.kmeans.akb') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Export KMeans AKB</a>
         </div>
         <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">

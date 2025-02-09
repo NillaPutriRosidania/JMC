@@ -6,8 +6,6 @@ use App\Exports\GeneralExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Cluster;
 use App\Models\KMeansAKB;
-use App\Models\Kecamatan;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class KMeansAKBController extends Controller

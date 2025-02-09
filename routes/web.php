@@ -32,19 +32,15 @@ Route::get('register', [AuthController::class, 'create'])->name('register');
 Route::post('register', [AuthController::class, 'store'])->name('register.store');
 Route::get('forgot-password', [AuthController::class, 'edit'])->name('forgot');
 Route::get('/api/kecamatan/{type}', [MapsController::class, 'getKecamatanData']);
-
-// Rute yang dapat diakses tanpa login (tanpa middleware auth)
 Route::resource('kmeans_aki', KMeansAKIController::class);
 Route::resource('kmeans_akb', KMeansAKBController::class);
 Route::resource('kmeans_aki3', KMeansAKI3Controller::class);
 Route::resource('kmeans_akb3', KMeansAKB3Controller::class);
 Route::resource('kmeans_aki4', KMeansAKI4Controller::class);
 Route::resource('kmeans_akb4', KMeansAKB4Controller::class);
-// Route::resource('berita', BeritaController::class)->only(['show']);
 Route::get('berita/{id}', [BeritaController::class, 'show'])
-    ->where('id', '[0-9]+') // Hanya angka yang diterima sebagai {id}
+    ->where('id', '[0-9]+')
     ->name('berita.show');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('berita', [BeritaController::class, 'index'])->name('berita.index');
@@ -52,7 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::post('berita', [BeritaController::class, 'store'])->name('berita.store');
     Route::get('berita/{id}/edit', [BeritaController::class, 'edit'])->name('berita.edit');
     Route::put('berita/{id}', [BeritaController::class, 'update'])->name('berita.update');
-    // Route::get('berita/{id}', [BeritaController::class, 'show'])->name('berita.show');
     Route::delete('berita/{id}', [BeritaController::class, 'destroy'])->name('berita.destroy');
     Route::resource('dashboard', DashboardController::class);
     Route::resource('kecamatan', KecamatanController::class);
@@ -65,4 +60,6 @@ Route::middleware('auth')->group(function () {
 
     //export
     Route::get('/export/kmeans-akb', [KMeansAKBController::class, 'exportData'])->name('export.kmeans.akb');
+    Route::get('/export/kmeans-akb3', [KMeansAKB3Controller::class, 'exportData'])->name('export.kmeans.akb3');
+    Route::get('/export/kmeans-akb4', [KMeansAKB4Controller::class, 'exportData'])->name('export.kmeans.akb4');
 });

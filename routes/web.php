@@ -62,4 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('akb', AKBController::class);
     Route::get('/api/charts/{type}/{puskesmasId}', [DashboardController::class, 'getChartData']);
     Route::get('logout', [AuthController::class, 'destroy'])->name('logout');
+
+    //export
+    Route::get('/export/kmeans-akb', [KMeansAKBController::class, 'exportData'])->name('export.kmeans.akb');
 });

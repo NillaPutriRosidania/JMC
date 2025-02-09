@@ -62,4 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/export/kmeans-akb', [KMeansAKBController::class, 'exportData'])->name('export.kmeans.akb');
     Route::get('/export/kmeans-akb3', [KMeansAKB3Controller::class, 'exportData'])->name('export.kmeans.akb3');
     Route::get('/export/kmeans-akb4', [KMeansAKB4Controller::class, 'exportData'])->name('export.kmeans.akb4');
+    Route::get('/export/kmeans-aki', [KMeansAKIController::class, 'exportData'])->name('export.kmeans.aki');
+    Route::get('/export/kmeans-aki3', [KMeansAKI3Controller::class, 'exportData'])->name('export.kmeans.aki3');
+    Route::get('/export/kmeans-aki4', [KMeansAKI4Controller::class, 'exportData'])->name('export.kmeans.aki4');
 });

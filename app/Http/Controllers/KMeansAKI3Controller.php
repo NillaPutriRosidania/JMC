@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\KMeansAKI;
-use App\Models\Kecamatan;
-use Illuminate\Http\Request;
+use App\Exports\GeneralExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 
 class KMeansAKI3Controller extends Controller
@@ -70,5 +70,22 @@ class KMeansAKI3Controller extends Controller
             'C3' => $finalClusters->get(4, collect([])),
         ];
         return view('kmeans_aki3.index', compact('kmeansAki', 'iterations', 'finalClusters'));
+    }
+    public function exportData()
+    {
+        $data = KMeansAKI::with(['kecamatan', 'cluster'])->get()->map(function ($item) {
+            $namaKecamatan = $item->kecamatan->nama_kecamatan ?? 'N/A';
+            $namaCluster3 = $item->cluster->where('id_cluster', $item->id_cluster_3)->first()->nama_cluster ?? 'N/A';
+            $grandTotalAki = $item->grand_total_aki ?? 'N/A';
+
+            return [
+                'nama_kecamatan' => $namaKecamatan,
+                'nama_cluster_3' => $namaCluster3,
+                'grand_total_aki' => $grandTotalAki,
+            ];
+        });
+
+        $headings = ['Nama Kecamatan', 'Cluster', 'Grand Total AKI'];
+        return Excel::download(new GeneralExport($data, $headings), 'data_export_aki3cluster.xlsx');
     }
 }

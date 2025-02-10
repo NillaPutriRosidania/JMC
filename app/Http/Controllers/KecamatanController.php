@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Kecamatan;
 use Illuminate\Http\Request;
+use App\Exports\GeneralExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class KecamatanController extends Controller
 {
@@ -91,4 +94,13 @@ class KecamatanController extends Controller
         return redirect()->route('kecamatan.index')
             ->with('success', 'Kecamatan berhasil dihapus.');
     }
+
+    public function export()
+{
+    $data = Kecamatan::select('nama_kecamatan', 'latitude', 'longitude')->get();
+    
+    $headings = ['Nama Kecamatan', 'Latitude', 'Longitude'];
+
+    return Excel::download(new GeneralExport($data, $headings), 'master_kecamatan.xlsx');
+}
 }

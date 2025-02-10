@@ -15,9 +15,15 @@
     <div class="mt-4">
         <form method="GET" action="{{ route('puskesmas.index') }}">
             <div class="flex justify-between items-center mx-28">
-                <a href="{{ route('puskesmas.create') }}" class="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600">
-                    Tambah puskesmas
-                </a>
+                <div class="flex gap-2">
+                    <a href="{{ route('puskesmas.create') }}" class="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600">
+                        Tambah puskesmas
+                    </a>
+                    <a href="{{ route('export.puskesmas') }}"
+                        class="bg-blue-500 text-white p-2 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-file-excel text-white"></i>
+                    </a>
+                </div>
                 <div class="flex items-center">
                     <input type="text" name="search" class="w-full p-2 border border-gray-300 rounded-lg mx-4"
                         placeholder="Cari puskesmas..." value="{{ request('search') }}">

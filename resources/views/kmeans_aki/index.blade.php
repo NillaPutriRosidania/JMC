@@ -3,6 +3,7 @@
 
 @section('content')
     <div class="container mx-auto p-4">
+
         <h2 class="text-lg font-bold text-center text-red-600 mb-4">Data KMeans AKI</h2>
         <div class="flex items-center w-full md:w-auto mb-4">
             <label for="cluster" class="mr-2">Pilih Cluster:</label>
@@ -13,12 +14,14 @@
             </select>
         </div>
         <div class="flex space-x-2 mb-4">
-            <a href="{{ route('export.kmeans.aki') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Export KMeans AKI</a>
+            <a href="{{ route('export.kmeans.aki') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Export KMeans
+                AKI</a>
         </div>
         <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
             <div class="relative">
-                <div id="map"></div>
-            </div>            
+                <div id="map""></div>
+                <button id="printButton">Cetak Peta</button>
+            </div>
         </div>
         <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
             <h2 class="text-lg font-bold text-gray-700 mb-4">Tabel Hasil Clustering</h2>
@@ -91,7 +94,7 @@
                 <ul class="flex space-x-4 w-full">
                     @foreach ($iterations as $key => $iteration)
                         <li class="inline-block w-full">
-                            <button 
+                            <button
                                 class="px-4 py-3 rounded-lg text-gray-900 hover:bg-gray-100 dark:hover:bg-red-600 dark:hover:text-white
                                     {{ $loop->first ? 'bg-red-600 text-white' : 'bg-white text-gray-500' }} font-semibold tab-link"
                                 onclick="showTabContent('tab-{{ $key }}', {{ $key }})">
@@ -103,7 +106,7 @@
                 @foreach ($iterations as $key => $iteration)
                     <div id="tab-{{ $key }}" class="tab-content hidden">
                         <h2 class="text-lg font-bold text-gray-700 mt-6 mb-2">Iterasi {{ $iteration['iteration'] }}</h2>
-                        
+
                         <!-- Centroids Table -->
                         <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
                             <h3 class="text-md font-bold text-gray-700">Centroid</h3>
@@ -130,7 +133,7 @@
                                 </table>
                             </div>
                         </div>
-        
+
                         <!-- Cluster Results Table -->
                         <div class="bg-white p-4 mb-4 border-2 border-gray-200 rounded-lg">
                             <h3 class="text-md font-bold text-gray-700">Hasil Iterasi</h3>
@@ -153,14 +156,18 @@
                                         @foreach ($iteration['clusters'] as $index => $cluster)
                                             <tr>
                                                 <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                                <td class="border border-gray-300 px-4 py-2">{{ $cluster['id_kecamatan'] }}</td>
+                                                <td class="border border-gray-300 px-4 py-2">{{ $cluster['id_kecamatan'] }}
+                                                </td>
                                                 @foreach ($cluster['distances'] as $distance)
                                                     @if ($loop->index < 5)
-                                                        <td class="border border-gray-300 px-4 py-2">{{ number_format($distance, 2) }}</td>
+                                                        <td class="border border-gray-300 px-4 py-2">
+                                                            {{ number_format($distance, 2) }}</td>
                                                     @endif
                                                 @endforeach
-                                                <td class="border border-gray-300 px-4 py-2">{{ number_format($cluster['min'], 2) }}</td>
-                                                <td class="border border-gray-300 px-4 py-2">C{{ $cluster['cluster'] }}</td>
+                                                <td class="border border-gray-300 px-4 py-2">
+                                                    {{ number_format($cluster['min'], 2) }}</td>
+                                                <td class="border border-gray-300 px-4 py-2">C{{ $cluster['cluster'] }}
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -170,26 +177,32 @@
                     </div>
                 @endforeach
             </div>
-        </div> 
+        </div>
     </div>
 @endsection
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!-- Pustaka Leaflet -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet-easyprint@2.1.8"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Pustaka SweetAlert2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-
         document.getElementById('cluster').addEventListener('change', function() {
             var selectedValue = this.value;
             if (selectedValue) {
                 window.location.href = '/' + selectedValue;
             }
         });
-
-        var map = L.map('map').setView([-8.1845, 113.6681], 11);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        var map = L.map('map').setView([-8.1845, 113.6681], 10);
+        var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            crossOrigin: true
         }).addTo(map);
+
+        tiles.on('tileerror', function(event) {
+            console.log('Tile error:', event);
+            alert('Tile error occurred! Check the console for details.');
+        });
 
         function generateColor(clusterId) {
             const colors = {
@@ -211,13 +224,126 @@
                         const layer = L.geoJSON(geojson, {
                             style: function() {
                                 return {
-                                    color: generateColor(kecamatan
-                                        .id_cluster),
+                                    color: generateColor(kecamatan.id_cluster),
                                     weight: 2,
                                     fillOpacity: 0.5
                                 };
                             }
-                        }).bindPopup(`<b>${kecamatan.nama_kecamatan}</b><br>Grand Total Aki: ${kecamatan.grand_total_aki}`).addTo(map);
+                        }).bindPopup(
+                            `<b>${kecamatan.nama_kecamatan}</b><br>Grand Total Aki: ${kecamatan.grand_total_aki}`
+                        ).addTo(map);
+                        layer.on('click', function() {
+                            if (kecamatan.id_cluster === 5) {
+                                Swal.fire({
+                                    title: "<strong style='font-size: 24px;'>AKI/AKB TINGGI</strong>",
+                                    icon: "warning",
+                                    html: "<p style='font-size: 14px;'>Jika AKI dan AKB tinggi, Dinas Kesehatan (Dinkes) akan meningkatkan kualitas pelayanan kesehatan, melakukan penyuluhan dan edukasi kesehatan, melatih tenaga medis, memperbaiki akses ke fasilitas kesehatan, menangani komplikasi, menyediakan program gizi, serta memantau kesehatan ibu dan bayi pasca persalinan untuk menurunkan angka kematian tersebut.</p>",
+                                    confirmButtonText: "OK",
+                                    confirmButtonColor: "#3085d6",
+                                });
+                            }
+                        });
+                    } catch (error) {
+                        console.error(`Error parsing GeoJSON for ${kecamatan.nama_kecamatan}:`,
+                            error);
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching GeoJSON:', error));
+        document.getElementById('printButton').addEventListener('click', function() {
+            printMap();
+        });
+
+        function printMap() {
+            var originalContent = document.body.innerHTML;
+            var printContent = document.getElementById('map').outerHTML;
+
+            document.body.innerHTML = printContent;
+            window.print();
+            window.location.reload();
+            document.body.innerHTML = originalContent;
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        showTabContent('tab-0');
+        setActiveTab(0);
+    });
+
+    function showTabContent(tabId, activeTabIndex) {
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => {
+            content.classList.add('hidden');
+        });
+        const activeTabContent = document.getElementById(tabId);
+        if (activeTabContent) {
+            activeTabContent.classList.remove('hidden');
+        }
+        setActiveTab(activeTabIndex);
+    }
+
+    function setActiveTab(activeTabIndex) {
+        const allTabs = document.querySelectorAll('button.tab-link');
+        allTabs.forEach((tab, index) => {
+            if (index === activeTabIndex) {
+                tab.classList.add('bg-red-600', 'text-white');
+                tab.classList.remove('bg-white', 'text-gray-500');
+            } else {
+                tab.classList.remove('bg-red-600', 'text-white');
+                tab.classList.add('bg-white', 'text-gray-500');
+            }
+        });
+    }
+</script>
+{{-- <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Event listener untuk perubahan cluster
+        document.getElementById('cluster').addEventListener('change', function() {
+            var selectedValue = this.value;
+            if (selectedValue) {
+                window.location.href = '/' + selectedValue;
+            }
+        });
+
+        // Membuat peta dan menambahkan layer OpenStreetMap
+        var map = L.map('map').setView([-8.1845, 113.6681], 11);
+        // Menambahkan tile layer OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        // Fungsi untuk menghasilkan warna berdasarkan id_cluster
+        function generateColor(clusterId) {
+            const colors = {
+                1: '#0000FF',
+                2: '#008000',
+                3: '#FFFF00',
+                4: '#FFA500',
+                5: '#FF0000'
+            };
+            return colors[clusterId] || '#000000';
+        }
+        fetch('/api/kecamatan/aki')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.forEach(kecamatan => {
+                    try {
+                        const geojson = JSON.parse(kecamatan.geojson);
+                        const layer = L.geoJSON(geojson, {
+                            style: function() {
+                                return {
+                                    color: generateColor(kecamatan.id_cluster),
+                                    weight: 2,
+                                    fillOpacity: 0.5
+                                };
+                            }
+                        }).bindPopup(
+                            `<b>${kecamatan.nama_kecamatan}</b><br>Grand Total Aki: ${kecamatan.grand_total_aki}`
+                        ).addTo(map);
+
+                        // Event listener untuk klik pada layer GeoJSON
                         layer.on('click', function() {
                             if (kecamatan.id_cluster === 5) {
                                 Swal.fire({
@@ -237,40 +363,4 @@
             })
             .catch(error => console.error('Error fetching GeoJSON:', error));
     });
-
-    document.getElementById('cluster').addEventListener('change', function() {
-        var selectedValue = this.value;
-        if (selectedValue) {
-            window.location.href = '/' + selectedValue;
-        }
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        showTabContent('tab-0');
-        setActiveTab(0);
-    });
-    function showTabContent(tabId, activeTabIndex) {
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabContents.forEach(content => {
-            content.classList.add('hidden');
-        });
-        const activeTabContent = document.getElementById(tabId);
-        if (activeTabContent) {
-            activeTabContent.classList.remove('hidden');
-        }
-        setActiveTab(activeTabIndex);
-    }
-    function setActiveTab(activeTabIndex) {
-        const allTabs = document.querySelectorAll('button.tab-link');
-        allTabs.forEach((tab, index) => {
-            if (index === activeTabIndex) {
-                tab.classList.add('bg-red-600', 'text-white');
-                tab.classList.remove('bg-white', 'text-gray-500');
-            } else {
-                tab.classList.remove('bg-red-600', 'text-white');
-                tab.classList.add('bg-white', 'text-gray-500');
-            }
-        });
-    }
-</script>
+</script> --}}

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\AKI;
 use App\Models\Tahun;
 use Illuminate\Support\Facades\Log;
+use App\Exports\GeneralExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AKIController extends Controller
 {
@@ -141,5 +143,63 @@ class AKIController extends Controller
 
             return redirect()->route('aki.edit', $id_data_aki)->with('error', 'Terjadi kesalahan saat memperbarui data.');
         }
+    }
+    public function export()
+    {
+        $sheets = [];
+        $tahunData = Tahun::all();
+
+        foreach ($tahunData as $tahun) {
+            $akiData = AKI::where('id_tahun', $tahun->id_tahun)
+                ->with('puskesmas.kecamatan')
+                ->get()
+                ->map(function ($aki) {
+                    return [
+                        'Puskesmas' => $aki->puskesmas->nama_puskesmas,
+                        'Kecamatan' => $aki->puskesmas->kecamatan->nama_kecamatan,
+                        'Jumlah AKI' => $aki->aki,
+                    ];
+                });
+            $sheets[] = new class($akiData, ['Puskesmas', 'Kecamatan', 'Jumlah AKI'], $tahun->tahun) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings, \Maatwebsite\Excel\Concerns\WithTitle {
+                protected $data;
+                protected $headings;
+                protected $tahun;
+
+                public function __construct($data, $headings, $tahun)
+                {
+                    $this->data = $data;
+                    $this->headings = $headings;
+                    $this->tahun = $tahun;
+                }
+
+                public function collection()
+                {
+                    return collect($this->data);
+                }
+
+                public function headings(): array
+                {
+                    return $this->headings;
+                }
+
+                public function title(): string
+                {
+                    return $this->tahun;
+                }
+            };
+        }
+        return Excel::download(new class($sheets) implements \Maatwebsite\Excel\Concerns\WithMultipleSheets {
+            protected $sheets;
+
+            public function __construct($sheets)
+            {
+                $this->sheets = $sheets;
+            }
+
+            public function sheets(): array
+            {
+                return $this->sheets;
+            }
+        }, 'aki_data.xlsx');
     }
 }

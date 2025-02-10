@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Puskesmas;
 use App\Models\Kecamatan;
 use Illuminate\Http\Request;
+use App\Exports\GeneralExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class PuskesmasController extends Controller
 {
@@ -77,5 +80,27 @@ class PuskesmasController extends Controller
 
         return redirect()->route('puskesmas.index')
             ->with('success', 'Puskesmas berhasil dihapus.');
+    }
+
+    public function export()
+    {
+        $data = Puskesmas::with('kecamatan')->get()->map(function ($puskesmas) {
+            return [
+                'nama_puskesmas' => $puskesmas->nama_puskesmas,
+                'alamat_puskesmas' => $puskesmas->alamat_puskesmas,
+                'nama_kecamatan' => $puskesmas->kecamatan->nama_kecamatan,
+                'lat' => $puskesmas->lat,
+                'long' => $puskesmas->long,
+            ];
+        });
+        $headings = [
+            'Nama Puskesmas',
+            'Alamat Puskesmas',
+            'Nama Kecamatan',
+            'Latitude',
+            'Longitude',
+        ];
+
+        return Excel::download(new GeneralExport($data, $headings), 'puskesmas.xlsx');
     }
 }

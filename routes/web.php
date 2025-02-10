@@ -16,6 +16,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\MapsController;
 use App\Http\Controllers\TahunController;
+use App\Models\AKI;
 use App\Models\Berita;
 
 Route::get('/', function () {
@@ -65,4 +66,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/export/kmeans-aki', [KMeansAKIController::class, 'exportData'])->name('export.kmeans.aki');
     Route::get('/export/kmeans-aki3', [KMeansAKI3Controller::class, 'exportData'])->name('export.kmeans.aki3');
     Route::get('/export/kmeans-aki4', [KMeansAKI4Controller::class, 'exportData'])->name('export.kmeans.aki4');
+    Route::get('/export/kecamatan', [KecamatanController::class, 'export'])->name('export.kecamatan');
+    Route::get('/export/puskesmas', [PuskesmasController::class, 'export'])->name('export.puskesmas');
+    Route::get('/export/aki', [AKIController::class, 'export'])->name('export.aki');
+    Route::get('/export/akb', [AKBController::class, 'export'])->name('export.akb');
 });

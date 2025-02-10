@@ -14,9 +14,15 @@
     <div class="mt-6">
         <form method="GET" action="{{ route('aki.index') }}">
             <div class="flex flex-wrap justify-between items-center gap-4 px-4 md:px-6">
-                <a href="{{ route('aki.create') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
-                    Tambah AKI
-                </a>
+                <div class="flex gap-2">
+                    <a href="{{ route('aki.create') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                        Tambah AKI
+                    </a>
+                    <a href="{{ route('export.aki') }}"
+                        class="bg-blue-500 text-white p-2 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-file-excel text-white"></i>
+                    </a>
+                </div>
                 <div class="flex items-center w-full md:w-auto">
                     <input type="text" name="search" class="flex-1 w-full p-2 border border-gray-300 rounded-lg"
                         placeholder="Cari berdasarkan nama puskesmas..." value="{{ request('search') }}">

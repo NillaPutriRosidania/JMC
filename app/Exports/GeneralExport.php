@@ -4,7 +4,6 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Illuminate\Support\Facades\Schema;
 
 class GeneralExport implements FromCollection, WithHeadings
 {
